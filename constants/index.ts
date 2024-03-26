@@ -1,0 +1,15 @@
+export const regions: string[] = [
+  "Tashkent",
+  "Andijan",
+  "Bukhara",
+  "Fergana",
+  "Jizzakh",
+  "Namangan",
+  "Navoiy",
+  "Qashqadaryo",
+  "Samarqand",
+  "Sirdaryo",
+  "Surxondaryo",
+  "Xorazm",
+  "Karakalpakstan",
+];
