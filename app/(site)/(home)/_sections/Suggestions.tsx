@@ -143,6 +143,7 @@ const SuggestionsSection = () => {
           // </Link>
         ))}
       </div>
+      
       <div className="mt-6 flex justify-center">
         <Pagination>
           <PaginationContent>

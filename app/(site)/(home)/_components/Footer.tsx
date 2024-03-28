@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Container from "./Container";
+import Container from "../../_components/Container";
 import Link from "next/link";
 import { FaFacebook, FaTelegram, FaInstagram } from "react-icons/fa6";
 import { Separator } from "@/components/ui/separator";

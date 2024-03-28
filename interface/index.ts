@@ -24,3 +24,7 @@ export interface ICardsMenu {
   icon: JSX.Element;
   label: string;
 }
+
+export interface ISidebarItem extends ICardsMenu {
+  route: string;
+}
