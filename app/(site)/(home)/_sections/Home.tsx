@@ -15,7 +15,7 @@ import { regions } from "@/constants";
 
 const HomeSection = () => {
   return (
-    <section className="p-2 relative h-[70vh] sm:h-[40vh] xl:h-[90vh]">
+    <section className="p-2 relative h-[70vh] xl:h-[90vh]">
       <div className="absolute inset-0 !h-full !w-full overflow-hidden rounded-xl">
         <video
           src="/video-fon.mp4"

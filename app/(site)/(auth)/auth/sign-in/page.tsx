@@ -8,27 +8,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 import Link from "next/link";
 
 export default function SignIn() {
   return (
     <div className="flex flex-col items-center p-8 h-full">
-      <Link
-        href={"/"}
-        className="text-current text-3xl uppercase font-bold flex items-center md:mb-8"
-      >
-        <Image
-          src={"/logo.png"}
-          width={60}
-          height={60}
-          className="object-cover"
-          alt="Logo"
-        />
-        Adore
-      </Link>
-
-      <Card className="sm:w-[540px] !min-w-full translate-y-2/4 md:translate-y-0 p-0 md:p-8 md:h-[529px]">
+      <Card className="sm:w-[540px] !min-w-full translate-y-2/4 xl:translate-y-0 p-0 md:p-8 md:h-[529px]">
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-semibold">Sign In</CardTitle>
           <CardDescription>

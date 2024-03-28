@@ -47,10 +47,10 @@ const SuggestionsSection = () => {
           // <Link key={i + 1} href={`room/${i + 1}`}>
           <Card
             key={i}
-            className="w-full overflow-hidden border-none shadow-none"
+            className="w-full overflow-hidden border-none shadow-none rounded-sm"
           >
             <CardContent className="flex flex-col gap-3 !p-0">
-              <div className="flex flex-col xl:flex-row gap-4">
+              <div className="flex flex-col xl:flex-row gap-3">
                 <div className="relative w-full h-[300px] xl:w-3/4">
                   <Image
                     src={
@@ -65,7 +65,7 @@ const SuggestionsSection = () => {
                   {[...Array(2)].map((_, i: number) => (
                     <div
                       key={i}
-                      className="w-2/4 md:w-[200px] !overflow-hidden"
+                      className="w-2/4 xl:w-[200px] !overflow-hidden"
                     >
                       <Carousel
                         swipeable={false}
@@ -79,7 +79,10 @@ const SuggestionsSection = () => {
                         transitionDuration={1000}
                       >
                         {caruselImages.map((imgUrl, i: number) => (
-                          <div key={i} className="!h-36 !w-full relative">
+                          <div
+                            key={i}
+                            className="h-40 xl:h-36 !w-full relative"
+                          >
                             <Image
                               src={imgUrl}
                               alt={`Fon ${i}`}
@@ -119,13 +122,13 @@ const SuggestionsSection = () => {
                 </div>
               </div>
               <div className="flex items-end justify-between mt-4">
-                <div className="flex flex-col xl:flex-row">
+                <div className="flex flex-col xl:flex-row xl:justify-between">
                   <CardDescription className="text-gray-500 text-base font-medium xl:w-[75%] mb-2 xl:mb-0 !line-clamp-3">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Iure, maiores quo inventore necessitatibus quaerat harum
                     Lorem, ipsum dolor.
                   </CardDescription>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-end gap-1">
                     <Button
                       className="bg-current hover:bg-current/90"
                       onClick={() => router.push(`/room/${i + 1}`)}
