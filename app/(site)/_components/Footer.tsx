@@ -4,6 +4,7 @@ import Image from "next/image";
 import Container from "./Container";
 import Link from "next/link";
 import { FaFacebook, FaTelegram, FaInstagram } from "react-icons/fa6";
+import { Separator } from "@/components/ui/separator";
 
 export default function Footer() {
   return (
@@ -19,28 +20,43 @@ export default function Footer() {
           />
           <h3 className="text-white text-4xl font-bold ">ADORE</h3>
         </div>
-        <div className="flex justify-between items-end mt-6">
-          <p className="text-white w-2/6">
+        <div className="flex flex-col md:flex-row justify-between items-end mt-6">
+          <p className="text-white w-full text-center md:text-left md:w-1/3 mb-6 md:mb-0">
             Ullam exercitationem laboriosam pariatur voluptatum tenetur vero
             numquam quaerat.
           </p>
-          <div className="flex flex-col items-end">
-            <p className="text-white text-md">Our call center</p>
-            <p className="text-white">
-              <a href="tel:+998999999999" className="hover:underline">
-                +998 99 999 99 99
-              </a>
-            </p>
-            <p className="text-white">
-              <a href="tel:+998998889999" className="hover:underline">
-                +998 99 888 99 99
-              </a>
-            </p>
+          <div className="flex flex-row-reverse md:flex-row w-full md:w-2/6 justify-between md:justify-end items-start md:items-end">
+            <div className="flex flex-col items-end">
+              <p className="text-white text-md">Our call center</p>
+              <p className="text-white">
+                <a href="tel:+998999999999" className="hover:underline">
+                  +998 99 999 99 99
+                </a>
+              </p>
+              <p className="text-white">
+                <a href="tel:+998998889999" className="hover:underline">
+                  +998 99 888 99 99
+                </a>
+              </p>
+            </div>
+            <div className="flex flex-col gap-1 md:hidden">
+              <Link href="/">
+                <FaFacebook className="text-white text-2xl" />
+              </Link>
+              <Link href="/">
+                <FaInstagram className="text-white text-2xl" />
+              </Link>
+              <Link href="/">
+                <FaTelegram className="text-white text-2xl" />
+              </Link>
+            </div>
           </div>
         </div>
-        <div className="mt-8 flex justify-between items-center">
-          <p className="text-white invisible">Lorem ipsum dolor sit ametasaa</p>
-          <div className="flex gap-3">
+
+        <Separator className="mt-4 bg-gray-300/40" />
+
+        <div className="mt-8 flex flex-row-reverse justify-center md:justify-between items-center">
+          <div className="hidden md:flex gap-3">
             <Link href="/">
               <FaFacebook className="text-white text-3xl" />
             </Link>

@@ -75,6 +75,26 @@
   }
 }
 
+/* Scroll Bar Styles Start */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+/* Scroll Bar Styles End */
+
+/* Carusel Styles Start */
 .react-multiple-carousel__arrow {
   min-height: 20px !important;
   min-width: 20px !important;
@@ -83,3 +103,25 @@
 .react-multiple-carousel__arrow::before {
   font-size: 12px !important;
 }
+/* Carusel Styles End */
+
+/* DatePicker Styles Start */
+.rdp-caption_start {
+  width: 100% !important;
+}
+
+.rdp-table {
+  min-width: 100% !important;
+  max-width: 100% !important;
+}
+
+.rdp-day_selected {
+  background-color: #0099ff !important;
+}
+
+.rdp-button[disabled]:not(.rdp-day_selected) {
+  background-color: #d9d9d9 !important;
+  border-radius: 50% !important;
+  color: #000 !important;
+}
+/* DatePicker Styles End */

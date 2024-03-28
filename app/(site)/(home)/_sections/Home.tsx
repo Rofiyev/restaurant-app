@@ -11,25 +11,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
-import Image from "next/image";
-import bg from "../../../../assets/background.jpeg";
 import { regions } from "@/constants";
-import { string } from "prop-types";
 
 const HomeSection = () => {
   return (
-    <section className="p-2 relative h-[90vh] rounded-xl">
-      <Image
-        src={bg.src}
-        alt="Background"
-        fill
-        className="brightness-75 object-cover"
-      />
+    <section className="p-2 relative h-[70vh] sm:h-[40vh] xl:h-[90vh]">
+      <div className="absolute inset-0 !h-full !w-full overflow-hidden rounded-xl">
+        <video
+          src="/video-fon.mp4"
+          muted
+          autoPlay
+          loop
+          className="object-cover !h-full !w-full aspect-auto xl:aspect-video"
+        ></video>
+      </div>
       <div className="absolute -bottom-5 left-2/4 -translate-x-2/4 z-10">
-        <div className="bg-white py-6 px-16 border-2 border-gray-200 rounded-xl flex gap-6">
+        <div className="bg-white py-2 px-4 sm:py-6 sm:px-16 border-2 border-gray-200 rounded-xl flex flex-row gap-2 md:gap-6">
           <Select>
-            <SelectTrigger className="w-[240px]">
-              <SelectValue placeholder="Select region" />
+            <SelectTrigger className="w-[140px] sm:w-[180px] md:w-[240px]">
+              <SelectValue placeholder="Regions" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -43,8 +43,8 @@ const HomeSection = () => {
             </SelectContent>
           </Select>
           <Select>
-            <SelectTrigger className="w-[240px]">
-              <SelectValue placeholder="Select district" />
+            <SelectTrigger className="w-[140px] sm:w-[180px] md:w-[240px]">
+              <SelectValue placeholder="Districts" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
@@ -57,7 +57,7 @@ const HomeSection = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Button variant={"outline"}>
+          <Button variant={"outline"} className="!p-2 md:p-4">
             <Search />
           </Button>
         </div>
