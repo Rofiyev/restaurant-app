@@ -11,7 +11,7 @@ export default function Header() {
     <nav className="py-4 px-6 flex justify-between !w-full">
       <RiMenu4Fill
         onClick={onOpen}
-        className="text-2xl visited:visible md:invisible cursor-pointer"
+        className="text-2xl visited:visible xl:invisible cursor-pointer"
       />
       <ProfileMenu />
     </nav>

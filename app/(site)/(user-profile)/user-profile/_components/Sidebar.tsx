@@ -39,7 +39,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="w-full !sticky !top-0 md:!w-[285px] h-screen bg-current/10 py-4 md:py-10 xl:py-[52px] px-3 flex flex-col justify-between items-center">
+    <div className="w-full !sticky !top-0 xl:!w-[285px] h-screen bg-current/10 py-4 md:py-10 xl:py-[52px] px-3 flex flex-col justify-between items-center">
       <div className="flex flex-col items-center w-full">
         <Logo />
 

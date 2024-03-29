@@ -44,7 +44,7 @@ export default function ProfileMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           {menuItems.map((item, i) => (
-            <Link href={item.route} key={i}>
+            <Link key={i} className="cursor-pointer" href={item.route}>
               <DropdownMenuItem>
                 {item.icon}
                 <span>{item.label}</span>

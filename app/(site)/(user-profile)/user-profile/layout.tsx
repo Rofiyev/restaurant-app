@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 const ProfileLayout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <section className="flex">
-      <div className="hidden md:flex">
+      <div className="hidden xl:flex">
         <Sidebar />
       </div>
-      <div className="flex md:hidden">
+      <div className="flex xl:hidden">
         <MobileSidebar />
       </div>
       <div className="w-full">

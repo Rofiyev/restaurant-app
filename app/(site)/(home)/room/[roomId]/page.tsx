@@ -167,6 +167,7 @@ export default function AboutRoomPage({
           </Card>
         ))}
       </div>
+      
       <div className="w-full block md:hidden mb-8">
         <h3 className="font-semibold text-2xl mb-6">All Services</h3>
         <Carousel
