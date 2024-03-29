@@ -8,8 +8,7 @@ import {
   CardFooter,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
-import Link from "next/link";
+
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
@@ -26,6 +25,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { cn } from "@/lib/utils";
 import { responsive } from "@/constants";
+import CustomImage from "../../_components/Image";
 
 const caruselImages: string[] = [
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmX0SscSWtU83bJbqpbkFjoSGSw6ivbDO67uzs9xR3fEGXE4z_RTGNi56GSHMjY95MeIE&usqp=CAU",
@@ -52,13 +52,11 @@ const SuggestionsSection = () => {
             <CardContent className="flex flex-col gap-3 !p-0">
               <div className="flex flex-col xl:flex-row gap-3">
                 <div className="relative w-full h-[300px] xl:w-3/4">
-                  <Image
-                    src={
-                      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmun0tJ3cbmjve3nMdum2qpYszhtxyxtl5WmvkyE97Zg&s"
-                    }
-                    fill
-                    alt={`Image${i + 1}`}
+                  <CustomImage
+                    imgUrl="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmun0tJ3cbmjve3nMdum2qpYszhtxyxtl5WmvkyE97Zg&s"
+                    alt="Image"
                     className="inset-0 object-cover"
+                    fill={true}
                   />
                 </div>
                 <div className="flex xl:flex-col gap-3 items-stretch">
@@ -76,19 +74,18 @@ const SuggestionsSection = () => {
                         autoPlay={true}
                         autoPlaySpeed={2000}
                         customTransition="all .5"
-                        transitionDuration={1000}
+                        transitionDuration={500}
                       >
                         {caruselImages.map((imgUrl, i: number) => (
                           <div
                             key={i}
                             className="h-40 xl:h-36 !w-full relative"
                           >
-                            <Image
-                              src={imgUrl}
+                            <CustomImage
+                              imgUrl={imgUrl}
                               alt={`Fon ${i}`}
-                              fill
-                              className="inset-0 object-cover"
-                              loading="lazy"
+                              fill={true}
+                              className={`inset-0 object-cover `}
                             />
                           </div>
                         ))}
@@ -143,7 +140,7 @@ const SuggestionsSection = () => {
           // </Link>
         ))}
       </div>
-      
+
       <div className="mt-6 flex justify-center">
         <Pagination>
           <PaginationContent>

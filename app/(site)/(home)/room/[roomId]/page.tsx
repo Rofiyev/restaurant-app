@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Carousel from "react-multi-carousel";
-import { format } from "date-fns";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import bg from "../../../../../assets/background.jpeg";
@@ -25,6 +23,7 @@ import { Input } from "@/components/ui/input";
 
 import { ICardsMenu } from "@/interface";
 import { responsive } from "@/constants";
+import CustomImage from "@/app/(site)/_components/Image";
 
 const cards: ICardsMenu[] = [
   {
@@ -61,6 +60,12 @@ const cards: ICardsMenu[] = [
   },
 ];
 
+const caruselImages: string[] = [
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmX0SscSWtU83bJbqpbkFjoSGSw6ivbDO67uzs9xR3fEGXE4z_RTGNi56GSHMjY95MeIE&usqp=CAU",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbAA5VpQErBxHVr6CdCNGO4ZdKpO4pxrY_4yvOHjCTPMsbEOYTWxgMwwUn_Df2W-MvzNk&usqp=CAU",
+  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRLD340bw4kxklVJamlK62VZZ1pSTyblBntM2o6701fA&s",
+];
+
 export default function AboutRoomPage({
   params,
 }: {
@@ -82,23 +87,22 @@ export default function AboutRoomPage({
             swipeable={false}
             draggable={false}
             responsive={responsive}
-            ssr={true}
-            infinite={true}
-            autoPlay={true}
+            infinite
+            autoPlay
             autoPlaySpeed={2000}
             customTransition="all .5"
-            transitionDuration={1000}
+            transitionDuration={500}
+            showDots
           >
-            {[Array(4)].map((_, i: number) => (
-              <Image
-                key={i}
-                src={bg.src}
-                alt="Fon 1"
-                width={300}
-                height={100}
-                className="!h-[540px] !w-full object-cover rounded-md"
-                loading="lazy"
-              />
+            {caruselImages.map((img: string, i: number) => (
+              <div key={i} className="w-full !h-[540px] relative">
+                <CustomImage
+                  imgUrl={img}
+                  alt="Fon 1"
+                  fill
+                  className="!h-[540px] !w-full object-cover rounded-md"
+                />
+              </div>
             ))}
           </Carousel>
         </div>
@@ -167,7 +171,7 @@ export default function AboutRoomPage({
           </Card>
         ))}
       </div>
-      
+
       <div className="w-full block md:hidden mb-8">
         <h3 className="font-semibold text-2xl mb-6">All Services</h3>
         <Carousel
