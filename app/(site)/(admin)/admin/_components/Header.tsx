@@ -13,7 +13,6 @@ export default function Header() {
         onClick={onOpen}
         className="text-2xl visited:visible xl:invisible cursor-pointer"
       />
-      <ProfileMenu />
     </nav>
   );
 }

@@ -23,7 +23,8 @@ const config = {
     },
     extend: {
       colors: {
-        current:"#047FC6",
+        current: "#047FC6",
+        current_bg_color: "#F8F8FA",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

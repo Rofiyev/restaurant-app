@@ -1,5 +1,6 @@
-"use clientu";
+"use client";
 
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -12,8 +13,13 @@ import {
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
 import { regions } from "@/constants";
+import { useDrawer } from "@/hooks/use-drawer";
 
 const HomeSection = () => {
+  const { onClose } = useDrawer();
+
+  useEffect(onClose, []);
+
   return (
     <section className="p-2 relative h-[70vh] xl:h-[90vh]">
       <div className="absolute inset-0 !h-full !w-full overflow-hidden rounded-xl">
