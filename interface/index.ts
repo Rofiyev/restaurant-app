@@ -1,6 +1,3 @@
-import { ReactNode } from "react";
-import { IconType } from "react-icons";
-
 export interface ICarusel {
   superLargeDesktop: {
     breakpoint: { max: number; min: number };
@@ -27,4 +24,18 @@ export interface ICardsMenu {
 
 export interface ISidebarItem extends ICardsMenu {
   route: string;
+}
+
+export interface IRegisterForm {
+  full_name: string;
+  email: string;
+  username: string;
+  password: string;
+  phone?: string;
+  isAdmin?: boolean;
+}
+
+export interface IActivateCode {
+  email: string;
+  activate_code: number;
 }

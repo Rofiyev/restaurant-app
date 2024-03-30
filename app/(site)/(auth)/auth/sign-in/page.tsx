@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardFooter,
@@ -9,11 +8,12 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import CustomCard from "../_components/Card";
 
 export default function SignIn() {
   return (
     <div className="flex flex-col items-center p-8 h-full">
-      <Card className="sm:w-[540px] !min-w-full translate-y-2/4 xl:translate-y-0 p-0 md:p-8 md:h-[529px]">
+      <CustomCard>
         <CardHeader className="text-center">
           <CardTitle className="text-3xl font-semibold">Sign In</CardTitle>
           <CardDescription>
@@ -46,7 +46,7 @@ export default function SignIn() {
             Log In
           </Button>
         </CardFooter>
-      </Card>
+      </CustomCard>
     </div>
   );
 }
