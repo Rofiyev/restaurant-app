@@ -44,10 +44,10 @@ const ActivateForm: FC<{ toggleIsActive: () => void; userEmail: string }> = ({
   const { mutate, isPending } = useMutation({
     mutationKey: ["register_user", "activate_code"],
     mutationFn: (data: IActivateCode) => activateRegisterCode(data),
-    onSuccess: () => {
-      toast.success("Parol tasdiqlandi!");
+    onSuccess: async () => {
+      toast.success("Password confirmed!");
+      await router.push("/");
       toggleIsActive();
-      router.push("/");
     },
     onError() {
       toast.error("There is an error in the email or code!");

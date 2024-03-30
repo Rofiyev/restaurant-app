@@ -13,32 +13,26 @@ import {
 } from "@/components/ui/select";
 import { Search } from "lucide-react";
 import { regions } from "@/constants";
-import { useDrawer } from "@/hooks/use-drawer";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useDrawer } from "@/hooks/use-drawer";
 
 const HomeSection = () => {
   const { onClose } = useDrawer();
-  const [bgLoad, setBgLoad] = useState<boolean>(true);
 
   useLayoutEffect(() => {
     onClose();
-    setBgLoad(false);
   }, []);
 
   return (
     <section className="p-2 relative h-[70vh] xl:h-[90vh]">
       <div className="absolute inset-0 !h-full !w-full overflow-hidden rounded-xl bg-gray-500">
-        {bgLoad ? (
-          <Skeleton className="object-cover !h-full !w-full aspect-auto xl:aspect-video" />
-        ) : (
-          <video
-            src="/video-fon.mp4"
-            muted
-            autoPlay
-            loop
-            className="object-cover !h-full !w-full aspect-auto xl:aspect-video"
-          ></video>
-        )}
+        <video
+          src="/video-fon.mp4"
+          muted
+          autoPlay
+          loop
+          className="object-cover !h-full !w-full aspect-auto xl:aspect-video"
+        ></video>
       </div>
       <div className="absolute -bottom-5 left-2/4 -translate-x-2/4 z-10">
         <div className="bg-white py-2 px-4 sm:py-6 sm:px-16 border-2 border-gray-200 rounded-xl flex flex-row gap-2 md:gap-6">

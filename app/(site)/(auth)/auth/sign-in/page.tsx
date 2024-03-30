@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   CardContent,
@@ -9,43 +11,142 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import CustomCard from "../_components/Card";
+import { useForm } from "react-hook-form";
+import { FormLoginSchema } from "@/schema/validation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ILoginForm, IUser } from "@/interface";
+import toast from "react-hot-toast";
+import { getUser, setLogin } from "@/actinos";
+import { useMutation } from "@tanstack/react-query";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form";
+import { twMerge } from "tailwind-merge";
+import { Loader2 } from "lucide-react";
+import { setToken } from "@/helpers/persistaneStorage";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export default function SignIn() {
+  const router = useRouter();
+
+  const form = useForm<z.infer<typeof FormLoginSchema>>({
+    resolver: zodResolver(FormLoginSchema),
+    defaultValues: {
+      username: "",
+      password: "",
+    },
+  });
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: ["login_user"],
+    mutationFn: (data: ILoginForm) => setLogin(data),
+    onSuccess: async (res) => {
+      await setToken(res?.data);
+      const { data }: { data: IUser } = await getUser();
+      Cookies.set("currentUser", JSON.stringify(data));
+      Cookies.set("role", JSON.stringify(data.is_admin ? "admin" : "user"));
+      toast.success("Hammasi joyida!");
+      router.push("/");
+      form.reset();
+    },
+    onError(error) {
+      console.log(error);
+      toast.error("Xatolik mavjud!");
+      form.reset();
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof FormLoginSchema>) => mutate(values);
+
   return (
     <div className="flex flex-col items-center p-8 h-full">
       <CustomCard>
-        <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-semibold">Sign In</CardTitle>
-          <CardDescription>
-            Don`t have an account?{" "}
-            <Link href={"/auth/sign-up"} className="text-current underline">
-              Sign Up
-            </Link>
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-3">
-          <Input
-            className="focus-visible:ring-offset-0 focus-visible:ring-current"
-            placeholder="Username"
-          />
-          <Input
-            className="focus-visible:ring-offset-0 focus-visible:ring-current"
-            placeholder="Password"
-          />
-          <CardDescription className="flex justify-end">
-            <Link
-              href={"/auth/reset-password"}
-              className="text-current underline"
-            >
-              Forgot your password?
-            </Link>
-          </CardDescription>
-        </CardContent>
-        <CardFooter>
-          <Button className="bg-current hover:bg-current/80 transition w-full">
-            Log In
-          </Button>
-        </CardFooter>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-3"
+          >
+            <CardHeader className="text-center">
+              <CardTitle className="text-3xl font-semibold">Sign In</CardTitle>
+              <CardDescription>
+                Don`t have an account?{" "}
+                <Link href={"/auth/sign-up"} className="text-current underline">
+                  Sign Up
+                </Link>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-3">
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        className={twMerge(
+                          "focus-visible:ring-offset-0 focus-visible:ring-current",
+                          fieldState.error &&
+                            "focus-visible:ring-red-600 focus-visible:border-none border-red-600"
+                        )}
+                        placeholder="Username"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field, fieldState }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="Password"
+                        className={twMerge(
+                          "focus-visible:ring-offset-0 focus-visible:ring-current",
+                          fieldState.error &&
+                            "focus-visible:ring-red-600 focus-visible:border-none border-red-600"
+                        )}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <CardDescription className="flex justify-end">
+                <Link
+                  href={"/auth/reset-password"}
+                  className="text-current underline"
+                >
+                  Forgot your password?
+                </Link>
+              </CardDescription>
+            </CardContent>
+            <CardFooter>
+              <Button
+                disabled={isPending}
+                type="submit"
+                className="bg-current hover:bg-current/80 transition w-full"
+              >
+                <>
+                  {isPending && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                </>
+                Log In
+              </Button>
+            </CardFooter>
+          </form>
+        </Form>
       </CustomCard>
     </div>
   );

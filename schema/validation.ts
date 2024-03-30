@@ -36,3 +36,34 @@ export const ActivateRegisterSchema = z.object({
     }),
   activate_code: z.string({ invalid_type_error, required_error }).length(6),
 });
+
+export const FormLoginSchema = z.object({
+  username: z.string({ invalid_type_error, required_error }).min(5, {
+    message: "Full Name must be at least 5 characters.",
+  }),
+  password: z
+    .string({ invalid_type_error, required_error })
+    .min(8, { message: "Your password must contain at least 8 characters" })
+    .max(16),
+});
+
+export const ResetPasswordSchema = z.object({
+  activation_code: z.string({ invalid_type_error, required_error }).length(6),
+  new_password: z
+    .string({ invalid_type_error, required_error })
+    .min(8, { message: "Your password must contain at least 8 characters" })
+    .max(16),
+  confirm_password: z
+    .string({ invalid_type_error, required_error })
+    .min(8, { message: "Your password must contain at least 8 characters" })
+    .max(16),
+});
+
+export const EmailSchema = z.object({
+  email: z
+    .string({ invalid_type_error, required_error })
+    .email({ message: "There might be an error in your email." })
+    .min(5, {
+      message: "Email must be at least 5 characters.",
+    }),
+});

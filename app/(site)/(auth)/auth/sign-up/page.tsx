@@ -30,6 +30,7 @@ import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import ActivateForm from "./_components/ActivateForm";
+import { setToken } from "@/helpers/persistaneStorage";
 
 export default function SignUp() {
   const [isActivate, setIsActivate] = useState<boolean>(false);
@@ -50,7 +51,8 @@ export default function SignUp() {
   const { mutate, isPending } = useMutation({
     mutationKey: ["register_user"],
     mutationFn: (data: IRegisterForm) => setRegister(data),
-    onSuccess: () => {
+    onSuccess: (res) => {
+      setToken(res.data);
       toast.success("Hammasi joyida!");
       toggleIsActive();
     },
@@ -58,7 +60,7 @@ export default function SignUp() {
       toast.error("Xatolik mavjud!");
       console.log(error, variables);
       toggleIsActive();
-      // form.reset();
+      form.reset();
     },
   });
 

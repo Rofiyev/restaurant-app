@@ -39,3 +39,30 @@ export interface IActivateCode {
   email: string;
   activate_code: number;
 }
+
+export interface ILoginForm {
+  username: string;
+  password: string;
+}
+
+export interface IUser {
+  id: number;
+  full_name: string;
+  email: string;
+  username: string;
+  phone: string | null;
+  image: string | null;
+  is_admin: boolean;
+}
+
+export interface IToken {
+  access: string;
+  refresh: string;
+}
+
+export interface IResetPassword {
+  email: string;
+  activation_code: number;
+  new_password: string;
+  confirm_password: string;
+}

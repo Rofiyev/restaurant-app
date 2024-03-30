@@ -1,3 +1,5 @@
+"use client";
+
 import HomeSection from "./_sections/Home";
 import SuggestionsSection from "./_sections/Suggestions";
 
