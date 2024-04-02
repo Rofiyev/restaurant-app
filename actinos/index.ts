@@ -68,3 +68,11 @@ export const getSearchData = ({
     params: { district_id, region_id },
   });
 };
+
+export const changeUserData = (formData: FormData) => {
+  return customAxios.put("/user/", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};

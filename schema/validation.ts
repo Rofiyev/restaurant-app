@@ -1,3 +1,4 @@
+import { isValidPhoneNumber } from "react-phone-number-input";
 import { z } from "zod";
 
 const invalid_type_error: string = "Invalid type provided for this field";
@@ -66,4 +67,23 @@ export const EmailSchema = z.object({
     .min(5, {
       message: "Email must be at least 5 characters.",
     }),
+});
+
+export const ProfileSchema = z.object({
+  full_name: z.string({ invalid_type_error, required_error }).min(5, {
+    message: "Full Name must be at least 5 characters.",
+  }),
+  username: z.string({ invalid_type_error, required_error }).min(5, {
+    message: "Full Name must be at least 5 characters.",
+  }),
+  email: z
+    .string({ invalid_type_error, required_error })
+    .email({ message: "There might be an error in your email." })
+    .min(5, {
+      message: "Email must be at least 5 characters.",
+    }),
+  phone: z
+    .string()
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" })
+    .or(z.literal("")),
 });

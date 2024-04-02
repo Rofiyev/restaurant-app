@@ -50,8 +50,6 @@ const SuggestionsSection = () => {
     refetch();
   }, [pageCount, refetch]);
 
-  console.log(error);
-
   useEffect(() => {
     if (res?.data) {
       stopLoading();

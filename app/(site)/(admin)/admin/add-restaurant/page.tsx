@@ -321,12 +321,6 @@ export default function AddRestaurantPage() {
             <div className="flex flex-col gap-2 mt-4">
               <span className="text-xl">Product Gallery</span>
               <label
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  const files = e.dataTransfer.files;
-                  setImagesFunc(files);
-                }}
                 htmlFor="images"
                 className="w-full h-40 border border-dashed flex justify-center items-center flex-col gap-2"
               >
@@ -339,10 +333,9 @@ export default function AddRestaurantPage() {
                   className="invisible"
                   multiple
                   accept="image/*"
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    console.log(e.target.files);
-                    setImagesFunc(e.target.files);
-                  }}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setImagesFunc(e.target.files)
+                  }
                 />
               </label>
 
