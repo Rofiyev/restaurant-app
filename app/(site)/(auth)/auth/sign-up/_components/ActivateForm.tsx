@@ -26,11 +26,13 @@ import { IActivateCode } from "@/interface";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { setToken } from "@/helpers/persistaneStorage";
 
-const ActivateForm: FC<{ toggleIsActive: () => void; userEmail: string }> = ({
-  toggleIsActive,
-  userEmail,
-}) => {
+const ActivateForm: FC<{
+  handleCookieData: () => void;
+  userEmail: string;
+  toggleIsActive: () => void;
+}> = ({ toggleIsActive, userEmail, handleCookieData }) => {
   const router = useRouter();
 
   const activateForm = useForm<z.infer<typeof ActivateRegisterSchema>>({
@@ -44,8 +46,14 @@ const ActivateForm: FC<{ toggleIsActive: () => void; userEmail: string }> = ({
   const { mutate, isPending } = useMutation({
     mutationKey: ["register_user", "activate_code"],
     mutationFn: (data: IActivateCode) => activateRegisterCode(data),
-    onSuccess: async () => {
-      toast.success("Password confirmed!");
+    onSuccess: async ({ data }) => {
+      toast.success(data.message);
+      const token = {
+        access: data.access,
+        refresh: data.refresh,
+      };
+      setToken(token);
+      handleCookieData();
       await router.push("/");
       toggleIsActive();
     },
@@ -58,6 +66,7 @@ const ActivateForm: FC<{ toggleIsActive: () => void; userEmail: string }> = ({
   const confirmCodeSubmit = (
     values: z.infer<typeof ActivateRegisterSchema>
   ) => {
+    console.log(values);
     mutate({ ...values, activate_code: +values.activate_code });
   };
 

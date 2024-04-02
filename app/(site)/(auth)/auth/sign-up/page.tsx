@@ -25,14 +25,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { twMerge } from "tailwind-merge";
 import { setRegister } from "@/actinos";
 import { useMutation } from "@tanstack/react-query";
-import { IRegisterForm } from "@/interface";
+import { IRegisterForm, IUser } from "@/interface";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import ActivateForm from "./_components/ActivateForm";
-import { setToken } from "@/helpers/persistaneStorage";
+import Cookies from "js-cookie";
 
 export default function SignUp() {
+  const [cookieData, setCookieData] = useState<boolean>(false);
   const [isActivate, setIsActivate] = useState<boolean>(false);
   const [userEmail, setUserEmail] = useState<string>("");
 
@@ -51,15 +52,16 @@ export default function SignUp() {
   const { mutate, isPending } = useMutation({
     mutationKey: ["register_user"],
     mutationFn: (data: IRegisterForm) => setRegister(data),
-    onSuccess: (res) => {
-      setToken(res.data);
-      toast.success("Hammasi joyida!");
+    onSuccess: (res: { data: IUser }) => {
+      if (cookieData && isActivate) {
+        Cookies.set("currentUser", JSON.stringify(res.data));
+        Cookies.set("role", res.data.is_admin ? "admin" : "user");
+      }
+      toast.success("Code sent to email address!");
       toggleIsActive();
     },
-    onError(error, variables) {
-      toast.error("Xatolik mavjud!");
-      console.log(error, variables);
-      toggleIsActive();
+    onError() {
+      toast.error("The data may contain errors!");
       form.reset();
     },
   });
@@ -69,11 +71,17 @@ export default function SignUp() {
     setUserEmail(values.email);
   };
 
+  const handleCookieData = () => setCookieData(true);
+
   return (
     <div className="flex flex-col items-center p-0 md:p-8">
       <CustomCard>
         {isActivate ? (
-          <ActivateForm toggleIsActive={toggleIsActive} userEmail={userEmail} />
+          <ActivateForm
+            handleCookieData={handleCookieData}
+            toggleIsActive={toggleIsActive}
+            userEmail={userEmail}
+          />
         ) : (
           <Form {...form}>
             <form

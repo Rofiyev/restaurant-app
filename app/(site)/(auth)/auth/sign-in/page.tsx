@@ -14,9 +14,9 @@ import CustomCard from "../_components/Card";
 import { useForm } from "react-hook-form";
 import { FormLoginSchema } from "@/schema/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ILoginForm, IUser } from "@/interface";
+import { ILoginForm } from "@/interface";
 import toast from "react-hot-toast";
-import { getUser, setLogin } from "@/actinos";
+import { setLogin } from "@/actinos";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import {
@@ -30,7 +30,6 @@ import { twMerge } from "tailwind-merge";
 import { Loader2 } from "lucide-react";
 import { setToken } from "@/helpers/persistaneStorage";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 
 export default function SignIn() {
   const router = useRouter();
@@ -47,17 +46,15 @@ export default function SignIn() {
     mutationKey: ["login_user"],
     mutationFn: (data: ILoginForm) => setLogin(data),
     onSuccess: async (res) => {
-      await setToken(res?.data);
-      const { data }: { data: IUser } = await getUser();
-      Cookies.set("currentUser", JSON.stringify(data));
-      Cookies.set("role", JSON.stringify(data.is_admin ? "admin" : "user"));
-      toast.success("Hammasi joyida!");
-      router.push("/");
+      if (res.data) {
+        setToken(res?.data);
+        toast.success("The information is confirmed!");
+        router.push("/");
+      }
       form.reset();
     },
-    onError(error) {
-      console.log(error);
-      toast.error("Xatolik mavjud!");
+    onError() {
+      toast.error("Data not available!");
       form.reset();
     },
   });
@@ -109,6 +106,7 @@ export default function SignIn() {
                   <FormItem>
                     <FormControl>
                       <Input
+                        type="password"
                         placeholder="Password"
                         className={twMerge(
                           "focus-visible:ring-offset-0 focus-visible:ring-current",

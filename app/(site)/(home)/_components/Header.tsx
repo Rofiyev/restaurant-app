@@ -7,10 +7,27 @@ import ProfileMenu from "@/components/shared/ProfileMenu";
 import { useUser } from "@/hooks/use-user";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { getUser } from "@/actinos";
+import Cookies from "js-cookie";
+import { IUser } from "@/interface";
 
 export default function Header() {
   const router = useRouter();
-  const { user } = useUser();
+  const { user, setUser } = useUser();
+  const { data: res } = useQuery<{ data: IUser }>({
+    queryKey: ["get_user"],
+    queryFn: getUser,
+  });
+
+  useEffect(() => {
+    if (res?.data) {
+      setUser(res?.data);
+      Cookies.set("currentUser", JSON.stringify(res.data));
+      Cookies.set("role", res.data.is_admin ? "admin" : "user");
+    }
+  }, [res, setUser]);
 
   return (
     <Container>

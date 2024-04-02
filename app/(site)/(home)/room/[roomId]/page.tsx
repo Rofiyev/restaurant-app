@@ -6,9 +6,12 @@ import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import bg from "../../../../../assets/background.jpeg";
 
-import { MdOutlineAttachMoney } from "react-icons/md";
 import { FaPeopleGroup, FaLocationDot, FaMapLocation } from "react-icons/fa6";
-import { MdRoomService, MdOutlineWifi } from "react-icons/md";
+import {
+  MdRoomService,
+  MdOutlineWifi,
+  MdOutlineAttachMoney,
+} from "react-icons/md";
 import { FaParking } from "react-icons/fa";
 import { VscOrganization } from "react-icons/vsc";
 import { CiMicrophoneOn } from "react-icons/ci";

@@ -66,3 +66,54 @@ export interface IResetPassword {
   new_password: string;
   confirm_password: string;
 }
+
+export interface IDistrict {
+  id: number;
+  name: string;
+  region: number;
+}
+export interface IRegion {
+  id: number;
+  name: string;
+}
+
+export interface IMyRestaurant {
+  id: number;
+  name: string;
+  price: string;
+  phone: string;
+  size_people: number;
+  address: {
+    id: number;
+    mahalla: number;
+    street: string;
+    house: string;
+  };
+}
+
+export type IRestaurant = {
+  id: number;
+  name: string;
+  price: number;
+  description: string;
+  size_people: number;
+  images: [
+    {
+      id: number;
+      image: string;
+    }
+  ];
+  address: {
+    id: number;
+    mahalla: number;
+    street: string;
+    house: string;
+  };
+};
+
+export interface IRestaurantList {
+  count: number;
+  next: any;
+  previous: any;
+  results: IRestaurant[];
+}

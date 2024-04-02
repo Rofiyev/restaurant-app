@@ -1,17 +1,14 @@
-interface tokenType {
-  access: string;
-  refetch: string;
-}
+import { IToken } from "@/interface";
 
 export const getToken = () => {
   try {
     const res = localStorage.getItem("token");
-    return res ? JSON.parse(res) : "";
+    return res && JSON.parse(res);
   } catch (error) {
     console.log(error);
   }
 };
-export const setToken = (data: tokenType) => {
+export const setToken = (data: IToken) => {
   try {
     return localStorage.setItem("token", JSON.stringify(data));
   } catch (error) {

@@ -8,23 +8,20 @@ const authAdminRoutes = ["/auth-admin/sign-in"];
 
 export async function middleware(request: NextRequest) {
   const currentUser = await request.cookies.get("currentUser")?.value;
-  const role = request.cookies.get("role")?.value;
+  const role = await request.cookies.get("role")?.value;
 
   if (
     (authRoutes.includes(request.nextUrl.pathname) && currentUser) ||
-    (currentUser && role === "admin")
+    (authAdminRoutes.includes(request.nextUrl.pathname) && currentUser)
   ) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (
-    (adminRoutes.includes(request.nextUrl.pathname) && role !== "user") ||
-    (authAdminRoutes.includes(request.nextUrl.pathname) && role !== "user")
-  ) {
+  if (adminRoutes.includes(request.nextUrl.pathname) && role !== "admin") {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (userRoutes.includes(request.nextUrl.pathname) && role !== "admin") {
+  if (userRoutes.includes(request.nextUrl.pathname) && role === "admin") {
     return NextResponse.redirect(new URL("/", request.url));
   }
 }

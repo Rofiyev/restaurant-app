@@ -22,15 +22,21 @@ import { AiOutlineFieldNumber } from "react-icons/ai";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Edit, Plus, Trash } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function AdminRestaurant() {
+  const router = useRouter();
+
   return (
     <div className="w-full px-1 md:px-2 xl:px-8">
       <div className="flex justify-between items-center mb-4 mt-0 md:mt-4 ">
         <h3 className="text-3xl sm:text-[42px] font-semibold xl:mt-0">
           Restaurant List
         </h3>
-        <Button variant={"outline"}>
+        <Button
+          onClick={() => router.push("/admin/add-restaurant")}
+          variant={"outline"}
+        >
           <Plus className="sm:mr-2 h-4 w-4" />{" "}
           <span className="hidden sm:block">Add Restaurant</span>
         </Button>
@@ -71,7 +77,6 @@ export default function AdminRestaurant() {
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter></TableFooter>
         </Table>
       </div>
 

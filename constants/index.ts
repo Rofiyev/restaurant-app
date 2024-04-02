@@ -1,21 +1,3 @@
-import { ICarusel } from "@/interface";
-
-export const regions: string[] = [
-  "Tashkent",
-  "Andijan",
-  "Bukhara",
-  "Fergana",
-  "Jizzakh",
-  "Namangan",
-  "Navoiy",
-  "Qashqadaryo",
-  "Samarqand",
-  "Sirdaryo",
-  "Surxondaryo",
-  "Xorazm",
-  "Karakalpakstan",
-];
-
 export const responsive = {
   superLargeDesktop: {
     breakpoint: { max: 4000, min: 3000 },

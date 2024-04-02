@@ -20,7 +20,7 @@ import { EmailSchema } from "@/schema/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
@@ -30,6 +30,7 @@ export const ResetFormEmail: FC<{
   changeEmail: (email: string) => void;
   resetNextForm: () => void;
 }> = ({ changeEmail, resetNextForm }) => {
+  const [email, setEmail] = useState<string>("");
   const form = useForm<z.infer<typeof EmailSchema>>({
     resolver: zodResolver(EmailSchema),
     defaultValues: {
@@ -41,8 +42,9 @@ export const ResetFormEmail: FC<{
     mutationKey: ["confrim_email"],
     mutationFn: (email: string) => resetEmail(email),
     onSuccess: async (res) => {
+      console.log(res);
       toast.success(res.data.detail);
-      changeEmail("rofiyevdilshod@gmail.com");
+      changeEmail(email);
       resetNextForm();
     },
     onError(error) {
@@ -51,7 +53,10 @@ export const ResetFormEmail: FC<{
     },
   });
 
-  const onSubmit = ({ email }: z.infer<typeof EmailSchema>) => mutate(email);
+  const onSubmit = ({ email }: z.infer<typeof EmailSchema>) => {
+    mutate(email);
+    setEmail(email);
+  };
 
   return (
     <Form {...form}>

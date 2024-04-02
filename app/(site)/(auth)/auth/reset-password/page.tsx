@@ -120,6 +120,7 @@ export default function Reset() {
                     <FormItem>
                       <FormControl>
                         <Input
+                          type="password"
                           placeholder="New Password"
                           className={twMerge(
                             "focus-visible:ring-offset-0 focus-visible:ring-current",
@@ -140,6 +141,7 @@ export default function Reset() {
                     <FormItem>
                       <FormControl>
                         <Input
+                          type="password"
                           placeholder="Confirm Password"
                           className={twMerge(
                             "focus-visible:ring-offset-0 focus-visible:ring-current",
