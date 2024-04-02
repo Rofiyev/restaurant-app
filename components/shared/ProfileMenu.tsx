@@ -18,7 +18,7 @@ import Cookies from "js-cookie";
 const menuItems = [
   {
     label: "Profile",
-    route: "",
+    route: "/",
     icon: <User className="mr-2 h-4 w-4" />,
   },
   {
@@ -66,7 +66,7 @@ export default function ProfileMenu() {
                   href={
                     user.is_admin
                       ? `/admin/${item.route}`
-                      : `/admin/${item.route}`
+                      : `/user-profile${item.route}`
                   }
                 >
                   <DropdownMenuItem>

@@ -52,7 +52,7 @@ const HomeSection = () => {
     mutationFn: (searchItem: ISearchParams) => getSearchData(searchItem),
     onSuccess({ data }) {
       data.results.length
-        ? setRestaurants(data.results)
+        ? setRestaurants(data)
         : toast.error(
             "There is no information for the request you have requested!"
           );

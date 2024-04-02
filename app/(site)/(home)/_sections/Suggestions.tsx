@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { MdOutlineBorderColor } from "react-icons/md";
 import { FaRegMoneyBill1, FaPeopleGroup } from "react-icons/fa6";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import {
   Pagination,
@@ -18,8 +19,6 @@ import {
   PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -35,23 +34,39 @@ import { useUser } from "@/hooks/use-user";
 import toast from "react-hot-toast";
 
 const SuggestionsSection = () => {
-  const { setRestaurants, restaurants } = useRestaurant();
+  const { setRestaurants, restaurants, loading, stopLoading } = useRestaurant();
   const { user } = useUser();
   const [pageCount, setPageCount] = useState<number>(1);
-  const { data: res } = useQuery({
+
+  const {
+    data: res,
+    refetch,
+    error,
+  } = useQuery({
     queryKey: ["restaurants"],
     queryFn: () => getAllRestaurant({ page: pageCount, page_size: 6 }),
   });
+  useEffect(() => {
+    refetch();
+  }, [pageCount, refetch]);
+
+  console.log(error);
 
   useEffect(() => {
-    res?.data && setRestaurants(res.data.results);
-  }, [res, setRestaurants]);
+    if (res?.data) {
+      stopLoading();
+      setRestaurants(res.data);
+    }
+  }, [res, setRestaurants, stopLoading]);
 
   const router = useRouter();
 
   const openRoomIdFunc = (route: string) => {
     user ? router.push(route) : toast.error("");
   };
+
+  const prevPage = () => pageCount > 1 && setPageCount(pageCount - 1);
+  const nextPage = () => setPageCount((prev: number) => prev + 1);
 
   return (
     <section className="mb-8 mt-16">
@@ -62,7 +77,7 @@ const SuggestionsSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {restaurants ? (
           <>
-            {restaurants.map((item: IRestaurant) => (
+            {restaurants.results.map((item: IRestaurant) => (
               <Card
                 key={item.id}
                 className="w-full overflow-hidden border-none shadow-none rounded-sm"
@@ -187,25 +202,58 @@ const SuggestionsSection = () => {
           </>
         )}
       </div>
-      {restaurants && restaurants.length > 5 && (
+
+      {!loading && restaurants?.results && restaurants?.results?.length > 6 && (
         <div className="mt-6 flex justify-center">
           <Pagination>
             <PaginationContent>
               <PaginationItem>
-                <PaginationPrevious className="cursor-pointer" />
+                <Button
+                  onClick={prevPage}
+                  className={cn(
+                    "border-transparent cursor-pointer flex gap-1 !px-2 !py-1 md:px-4 md:py-2",
+                    !restaurants?.previous
+                      ? "cursor-not-allowed hover:bg-transparent opacity-60 "
+                      : "cursor-pointer"
+                  )}
+                  variant={"outline"}
+                >
+                  <IoIosArrowBack />
+                  <span className="text-neutral-800 hidden md:block">
+                    Previous
+                  </span>
+                </Button>
+              </PaginationItem>
+              {pageCount > 3 && (
+                <PaginationItem>
+                  <PaginationEllipsis />
+                </PaginationItem>
+              )}
+              <PaginationItem>
+                {pageCount > 2 && (
+                  <PaginationLink className="cursor-pointer h-8 w-8 md:h-10 md:w-10">
+                    {pageCount - 2}
+                  </PaginationLink>
+                )}
+              </PaginationItem>
+              <PaginationItem>
+                {pageCount > 1 && (
+                  <PaginationLink className="cursor-pointer h-8 w-8 md:h-10 md:w-10">
+                    {pageCount - 1}
+                  </PaginationLink>
+                )}
               </PaginationItem>
               {[...Array(3)].map((_, i: number) => (
                 <PaginationItem key={i + 1}>
                   <PaginationLink
-                    onClick={() => setPageCount(i + 1)}
                     className={cn(
-                      pageCount === i + 1 &&
+                      "h-8 w-8 md:h-10 md:w-10 cursor-default",
+                      i + 1 * pageCount === pageCount &&
                         "bg-current text-white hover:bg-current/90 hover:text-white transition-colors"
                     )}
-                    href="#"
-                    isActive={i + 1 === pageCount}
+                    isActive={i + 1 * pageCount === pageCount}
                   >
-                    {i + 1}
+                    {i + 1 * pageCount}
                   </PaginationLink>
                 </PaginationItem>
               ))}
@@ -213,7 +261,19 @@ const SuggestionsSection = () => {
                 <PaginationEllipsis />
               </PaginationItem>
               <PaginationItem>
-                <PaginationNext className="cursor-pointer" />
+                <Button
+                  onClick={nextPage}
+                  variant={"outline"}
+                  className={cn(
+                    "border-transparent cursor-pointer flex gap-1 !px-2 !py-1 md:px-4 md:py-2",
+                    !restaurants?.next
+                      ? "cursor-not-allowed hover:bg-transparent opacity-60 "
+                      : "cursor-pointer"
+                  )}
+                >
+                  <span className="text-neutral-800 hidden md:block">Next</span>
+                  <IoIosArrowForward />
+                </Button>
               </PaginationItem>
             </PaginationContent>
           </Pagination>

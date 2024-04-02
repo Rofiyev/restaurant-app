@@ -113,8 +113,8 @@ export type IRestaurant = {
 
 export interface IRestaurantList {
   count: number;
-  next: any;
-  previous: any;
+  next: null | boolean;
+  previous: null | boolean;
   results: IRestaurant[];
 }
 

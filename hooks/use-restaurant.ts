@@ -1,10 +1,10 @@
-import { IRestaurant } from "@/interface";
+import { IRestaurantList } from "@/interface";
 import { create } from "zustand";
 
 type TUseRestaurant = {
   loading: boolean;
-  restaurants: IRestaurant[] | null;
-  setRestaurants: (data: IRestaurant[]) => void;
+  restaurants: IRestaurantList | null;
+  setRestaurants: (data: IRestaurantList) => void;
   startLoading: () => void;
   stopLoading: () => void;
 };
@@ -12,7 +12,7 @@ type TUseRestaurant = {
 export const useRestaurant = create<TUseRestaurant>((set) => ({
   loading: true,
   restaurants: null,
-  setRestaurants: (data: IRestaurant[]) => set({ restaurants: data }),
+  setRestaurants: (data: IRestaurantList) => set({ restaurants: data }),
   startLoading: () => set({ loading: true }),
   stopLoading: () => set({ loading: false }),
 }));
