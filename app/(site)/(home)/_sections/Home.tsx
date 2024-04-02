@@ -14,8 +14,10 @@ import {
 import { Loader2, Search } from "lucide-react";
 import { useDrawer } from "@/hooks/use-drawer";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getDistricts, getRegions } from "@/actinos";
-import { IDistrict, IRegion } from "@/interface";
+import { getDistricts, getRegions, getSearchData } from "@/actinos";
+import { IDistrict, IRegion, ISearchParams } from "@/interface";
+import { useRestaurant } from "@/hooks/use-restaurant";
+import toast from "react-hot-toast";
 
 const HomeSection = () => {
   const [searchData, setSearchData] = useState<{
@@ -27,6 +29,7 @@ const HomeSection = () => {
   });
   const [districts, setDistricts] = useState<IDistrict[]>([]);
 
+  const { setRestaurants } = useRestaurant();
   const { onClose } = useDrawer();
   const { data: reg } = useQuery({
     queryKey: ["region"],
@@ -44,8 +47,27 @@ const HomeSection = () => {
     },
   });
 
+  const { mutate: filterDataFunc, isPending: isSearching } = useMutation({
+    mutationKey: ["search_data"],
+    mutationFn: (searchItem: ISearchParams) => getSearchData(searchItem),
+    onSuccess({ data }) {
+      data.results.length
+        ? setRestaurants(data.results)
+        : toast.error(
+            "There is no information for the request you have requested!"
+          );
+    },
+    onError(error, variables) {
+      console.log(error, variables);
+    },
+  });
+
   const searchFilter = () => {
-    console.log(searchData);
+    filterDataFunc({
+      region_id: +searchData.region_id,
+      district_id: +searchData.district_id,
+    });
+    setSearchData({ district_id: "", region_id: "" });
   };
 
   const handelRegion = (value: string) => {
@@ -116,6 +138,7 @@ const HomeSection = () => {
             </SelectContent>
           </Select>
           <Button
+            disabled={isSearching}
             onClick={searchFilter}
             variant={"outline"}
             className="!p-2 md:p-4"

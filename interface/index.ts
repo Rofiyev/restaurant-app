@@ -117,3 +117,8 @@ export interface IRestaurantList {
   previous: any;
   results: IRestaurant[];
 }
+
+export interface ISearchParams {
+  region_id: number;
+  district_id: number;
+}

@@ -6,6 +6,7 @@ import {
   IRegisterForm,
   IResetPassword,
   IRestaurantList,
+  ISearchParams,
 } from "@/interface";
 
 export const setRegister = (data: IRegisterForm) => {
@@ -55,4 +56,15 @@ export const getAllRestaurant = ({
   page_size: number;
 }): Promise<{ data: IRestaurantList }> => {
   return customAxios.get("/restaurant/list", { params: { page, page_size } });
+};
+
+export const getSearchData = ({
+  district_id,
+  region_id,
+}: ISearchParams): Promise<{
+  data: IRestaurantList;
+}> => {
+  return customAxios.get("/restaurant/list", {
+    params: { district_id, region_id },
+  });
 };
