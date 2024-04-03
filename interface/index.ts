@@ -122,3 +122,19 @@ export interface ISearchParams {
   region_id: number;
   district_id: number;
 }
+
+export interface IMyBooking {
+  id: number;
+  name: string;
+  price: number;
+  phone: string;
+  size_people: number;
+  address: {
+    id: number;
+    mahalla: number;
+    region: string;
+    district: string;
+    street: string;
+    house: string;
+  };
+}

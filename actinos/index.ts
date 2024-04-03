@@ -2,6 +2,7 @@ import customAxios from "@/services/axios";
 import {
   IActivateCode,
   ILoginForm,
+  IMyBooking,
   IMyRestaurant,
   IRegisterForm,
   IResetPassword,
@@ -44,7 +45,7 @@ export const getDistricts = (region_id: number) => {
   return customAxios.get("/district", { params: { region_id } });
 };
 
-export const getMyBooking = (): Promise<{ data: IMyRestaurant[] }> => {
+export const getMyBooking = (): Promise<{ data: IMyBooking[] }> => {
   return customAxios.get("/restaurant/my");
 };
 
