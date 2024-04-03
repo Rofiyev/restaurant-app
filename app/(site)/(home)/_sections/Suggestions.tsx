@@ -38,11 +38,7 @@ const SuggestionsSection = () => {
   const { user } = useUser();
   const [pageCount, setPageCount] = useState<number>(1);
 
-  const {
-    data: res,
-    refetch,
-    error,
-  } = useQuery({
+  const { data: res, refetch } = useQuery({
     queryKey: ["restaurants"],
     queryFn: () => getAllRestaurant({ page: pageCount, page_size: 6 }),
   });
@@ -60,7 +56,7 @@ const SuggestionsSection = () => {
   const router = useRouter();
 
   const openRoomIdFunc = (route: string) => {
-    user ? router.push(route) : toast.error("");
+    user ? router.push(route) : toast.error("You are required to register!");
   };
 
   const prevPage = () => pageCount > 1 && setPageCount(pageCount - 1);

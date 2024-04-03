@@ -138,3 +138,53 @@ export interface IMyBooking {
     house: string;
   };
 }
+
+export type IUserData = {
+  full_name: string;
+  image: string;
+};
+
+export type IComment = {
+  id: number;
+  text: string;
+  user: {
+    username: string;
+    image: string;
+  };
+  created_at: string;
+};
+
+export interface IRoomId extends IRestaurant {
+  phone: string;
+  services: number[];
+  user: IUserData;
+  comments: IComment[];
+  comment_count: string;
+}
+
+export interface IServices {
+  id: number;
+  name: string;
+  image: string;
+}
+
+export interface IPostComment {
+  text: string;
+  restaurant: number;
+}
+enum Status {
+  pending,
+  approved,
+  rejected,
+}
+
+export interface IBooking {
+  id: number;
+  date: string;
+  morning: boolean;
+  afternoon: boolean;
+  evening: boolean;
+  user: IUserData;
+  restaurant: number;
+  status: Status;
+}

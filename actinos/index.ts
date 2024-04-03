@@ -1,13 +1,17 @@
 import customAxios from "@/services/axios";
 import {
   IActivateCode,
+  IBooking,
   ILoginForm,
   IMyBooking,
   IMyRestaurant,
+  IPostComment,
   IRegisterForm,
   IResetPassword,
   IRestaurantList,
+  IRoomId,
   ISearchParams,
+  IServices,
 } from "@/interface";
 
 export const setRegister = (data: IRegisterForm) => {
@@ -76,4 +80,20 @@ export const changeUserData = (formData: FormData) => {
       "Content-Type": "multipart/form-data",
     },
   });
+};
+
+export const getRoomId = (id: string): Promise<{ data: IRoomId }> => {
+  return customAxios.get(`/restaurant/detail/${id}`);
+};
+
+export const getServices = (): Promise<{ data: IServices[] }> => {
+  return customAxios.get(`/service`);
+};
+
+export const postComment = (data: IPostComment) => {
+  return customAxios.post(`/comment`, data);
+};
+
+export const bookingRoomId = (): Promise<{ data: IBooking[] }> => {
+  return customAxios.get(`/booking/my`);
 };

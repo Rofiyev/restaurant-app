@@ -3,16 +3,25 @@
 import Logo from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
 import { useDrawer } from "@/hooks/use-drawer";
+import { useUser } from "@/hooks/use-user";
 import { ISidebarItem } from "@/interface";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaRegUser, FaListUl } from "react-icons/fa";
 import { IoExitOutline } from "react-icons/io5";
 import { LuLayoutList } from "react-icons/lu";
+import Cookies from "js-cookie";
 
 export default function Sidebar() {
   const router = usePathname();
   const { onClose } = useDrawer();
+  const { removeUser } = useUser();
+
+  const logoutProfile = () => {
+    removeUser();
+    Cookies.remove("currentUser");
+    Cookies.remove("role");
+  };
 
   const links: ISidebarItem[] = [
     {
@@ -81,6 +90,7 @@ export default function Sidebar() {
       <Button
         className="w-full border-gray-900 bg-transparent hover:bg-red-400 hover:border-red-400 border-[1px] group flex justify-start !p-3"
         variant={"outline"}
+        onClick={logoutProfile}
       >
         <IoExitOutline className="w-[22px] h-[22px] mr-3 group-hover:text-white" />
         <span className="group-hover:text-white font-medium">Logout</span>
