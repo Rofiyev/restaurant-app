@@ -63,11 +63,13 @@ const HomeSection = () => {
   });
 
   const searchFilter = () => {
-    filterDataFunc({
-      region_id: +searchData.region_id,
-      district_id: +searchData.district_id,
-    });
-    setSearchData({ district_id: "", region_id: "" });
+    if (searchData.district_id && searchData.region_id) {
+      filterDataFunc({
+        region_id: +searchData.region_id,
+        district_id: +searchData.district_id,
+      });
+      setSearchData({ district_id: "", region_id: "" });
+    }
   };
 
   const handelRegion = (value: string) => {

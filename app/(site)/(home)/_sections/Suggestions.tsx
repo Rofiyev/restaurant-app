@@ -171,10 +171,7 @@ const SuggestionsSection = () => {
                   </div>
                   <div className="w-full flex flex-col xl:flex-row justify-between items-end gap-4 mt-2">
                     <CardDescription className="text-md text-neutral-700 !line-clamp-3 w-full xl:w-3/4">
-                      {item.description} Lorem ipsum dolor sit, amet consectetur
-                      adipisicing elit. Corporis enim quam, reprehenderit
-                      praesentium laudantium ab cupiditate odio architecto
-                      repellendus labore?
+                      {item.description}
                     </CardDescription>
                     <Button
                       onClick={() => openRoomIdFunc(`/room/${item.id}`)}

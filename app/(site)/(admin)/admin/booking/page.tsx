@@ -29,8 +29,17 @@ import {
 import { GoDotFill } from "react-icons/go";
 import { AiOutlineFieldNumber } from "react-icons/ai";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { getMyBooking } from "@/actinos";
 
 export default function AdminBooking() {
+  const { data: res } = useQuery({
+    queryKey: ["get_booking"],
+    queryFn: getMyBooking,
+  });
+
+  console.log(res?.data);
+
   return (
     <div className="w-full px-1 md:px-2 xl:px-8">
       <h3 className="text-3xl sm:text-[42px] font-semibold mb-2 sm:mb-0 md:mt-4 xl:mt-0">

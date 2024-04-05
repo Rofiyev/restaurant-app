@@ -2,10 +2,15 @@ import customAxios from "@/services/axios";
 import {
   IActivateCode,
   IBooking,
+  ICheckDay,
+  ICheckDayRes,
+  IDistrict,
   ILoginForm,
   IMyBooking,
-  IMyRestaurant,
+  INeighborhood,
+  IOrderOneDayRequest,
   IPostComment,
+  IRegion,
   IRegisterForm,
   IResetPassword,
   IRestaurantList,
@@ -41,12 +46,20 @@ export const confirmPassword = (data: IResetPassword) => {
   return customAxios.post("/user/reset-password-confirm", { ...data });
 };
 
-export const getRegions = () => {
+export const getRegions = (): Promise<{ data: IRegion[] }> => {
   return customAxios.get("/region");
 };
 
-export const getDistricts = (region_id: number) => {
+export const getDistricts = (
+  region_id: number
+): Promise<{ data: IDistrict[] }> => {
   return customAxios.get("/district", { params: { region_id } });
+};
+
+export const getNeighborhood = (
+  district_id: number
+): Promise<{ data: INeighborhood[] }> => {
+  return customAxios.get("/mahalla", { params: { district_id } });
 };
 
 export const getMyBooking = (): Promise<{ data: IMyBooking[] }> => {
@@ -96,4 +109,19 @@ export const postComment = (data: IPostComment) => {
 
 export const bookingRoomId = (): Promise<{ data: IBooking[] }> => {
   return customAxios.get(`/booking/my`);
+};
+
+export const checkDay = ({
+  date,
+  restaurant_id,
+}: ICheckDay): Promise<{ data: ICheckDayRes[] }> => {
+  return customAxios.get(`/booking/free`, {
+    params: { date, restaurant_id },
+  });
+};
+
+export const orederOneDay = (
+  data: IOrderOneDayRequest
+): Promise<{ data: IOrderOneDayRequest }> => {
+  return customAxios.post(`/booking`, data);
 };

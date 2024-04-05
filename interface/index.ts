@@ -72,6 +72,11 @@ export interface IDistrict {
   name: string;
   region: number;
 }
+export interface INeighborhood {
+  id: number;
+  name: string;
+  district: number;
+}
 export interface IRegion {
   id: number;
   name: string;
@@ -187,4 +192,28 @@ export interface IBooking {
   user: IUserData;
   restaurant: number;
   status: Status;
+}
+
+export interface ICheckDay {
+  date: string;
+  restaurant_id: number;
+}
+
+export interface ITime {
+  morning_time: boolean;
+  afternoon_time: boolean;
+  evening_time: boolean;
+}
+
+export interface ICheckDayRes extends ITime {
+  restaurant: number;
+}
+
+export interface IOrderOneDayRequest {
+  date: string;
+  morning: boolean;
+  afternoon: boolean;
+  evening: boolean;
+  restaurant: number;
+  status?: string;
 }

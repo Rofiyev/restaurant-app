@@ -10,26 +10,26 @@ export async function middleware(request: NextRequest) {
   const currentUser = await request.cookies.get("currentUser")?.value;
   const role = await request.cookies.get("role")?.value;
 
-  // if (
-  //   (authRoutes.includes(request.nextUrl.pathname) && currentUser) ||
-  //   (authAdminRoutes.includes(request.nextUrl.pathname) && currentUser)
-  // ) {
-  //   return NextResponse.redirect(new URL("/", request.url));
-  // }
+  if (
+    (authRoutes.includes(request.nextUrl.pathname) && currentUser) ||
+    (authAdminRoutes.includes(request.nextUrl.pathname) && currentUser)
+  ) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
-  // if (
-  //   adminRoutes.includes(request.nextUrl.pathname) &&
-  //   role !== "admin" &&
-  //   !currentUser
-  // ) {
-  //   return NextResponse.redirect(new URL("/", request.url));
-  // }
+  if (
+    adminRoutes.includes(request.nextUrl.pathname) &&
+    role !== "admin" &&
+    !currentUser
+  ) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 
-  // if (
-  //   userRoutes.includes(request.nextUrl.pathname) &&
-  //   role === "admin" &&
-  //   !currentUser
-  // ) {
-  //   return NextResponse.redirect(new URL("/", request.url));
-  // }
+  if (
+    userRoutes.includes(request.nextUrl.pathname) &&
+    role === "admin" &&
+    !currentUser
+  ) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
 }

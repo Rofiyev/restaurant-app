@@ -1,35 +1,21 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Carousel from "react-multi-carousel";
-import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
-import { FaPeopleGroup, FaLocationDot, FaMapLocation } from "react-icons/fa6";
-import { MdRoomService, MdOutlineWifi } from "react-icons/md";
-import { FaParking } from "react-icons/fa";
-import { VscOrganization } from "react-icons/vsc";
-import { CiMicrophoneOn } from "react-icons/ci";
-import { BsMusicNoteList, BsDot } from "react-icons/bs";
-import { BiSolidCoffee } from "react-icons/bi";
-
+import { FaPeopleGroup, FaLocationDot } from "react-icons/fa6";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { Input } from "@/components/ui/input";
-
-import {
-  ICardsMenu,
-  IComment,
-  IPostComment,
-  IRoomId,
-  IServices,
-} from "@/interface";
+import { IRoomId, IServices } from "@/interface";
 import { responsive } from "@/constants";
 import CustomImage from "@/app/(site)/_components/Image";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { bookingRoomId, getRoomId, getServices, postComment } from "@/actinos";
+import { useQuery } from "@tanstack/react-query";
+import { getRoomId, getServices } from "@/actinos";
 import PageSkeleton from "./_components/PageSkeleton";
+import DateComponent from "./_components/DateComponent";
+import Comments from "./_components/Comments";
+import ServiceCard from "./_components/ServiceCard";
 
 export default function AboutRoomPage({
   params,
@@ -37,16 +23,10 @@ export default function AboutRoomPage({
   params: { roomId: string };
 }) {
   const [room, setRoom] = useState<IRoomId | null>(null);
-  const [commentData, setCommentData] = useState<string>("");
   const { data: res, refetch } = useQuery({
     queryKey: ["get_room_id"],
     queryFn: () => getRoomId(params.roomId),
   });
-  const { data: booingData } = useQuery({
-    queryKey: ["booking_get"],
-    queryFn: bookingRoomId,
-  });
-  console.log(booingData);
 
   const { data: services } = useQuery({
     queryKey: ["services"],
@@ -57,39 +37,10 @@ export default function AboutRoomPage({
     res?.data && setRoom(res?.data);
   }, [res?.data]);
 
-  const [selected, setSelected] = useState<Date>();
-  const disabledDays = [
-    new Date(2024, 2, 10),
-    new Date(2024, 2, 12),
-    new Date(2024, 2, 20),
-  ];
-
-  const { mutate, isPending } = useMutation({
-    mutationKey: ["comment_post"],
-    mutationFn: (data: IPostComment) => postComment(data),
-    onSuccess(res) {
-      if (res.data) {
-        refetch();
-        setTimeout(() => {
-          document.querySelector("#comments")?.scrollTo({
-            left: 0,
-            top: document.querySelector("#comments")?.scrollHeight,
-            behavior: "smooth",
-          });
-        }, 500);
-      }
-    },
-  });
-
-  const sendComment = () => {
-    if (commentData.trim())
-      mutate({ text: commentData, restaurant: +params.roomId });
-    setCommentData("");
-  };
-
   const bookingFunc = () =>
     document.querySelector("#booking")?.scrollIntoView({ behavior: "smooth" });
 
+  const refetchFunc = () => refetch();
   return (
     <>
       {room ? (
@@ -187,21 +138,7 @@ export default function AboutRoomPage({
           {services?.data && (
             <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
               {services.data.map((item: IServices) => (
-                <Card key={item.id} className="!w-full p-4">
-                  <CardContent className="relative w-24 h-24 mx-auto mb-2">
-                    <CustomImage
-                      imgUrl={item.image}
-                      alt={item.name}
-                      fill
-                      className="object-contain"
-                    />
-                  </CardContent>
-                  <CardFooter className="flex justify-center !p-0">
-                    <span className="text-xl font-medium w-9/12 text-center">
-                      {item.name}
-                    </span>
-                  </CardFooter>
-                </Card>
+                <ServiceCard key={item.id} item={item} />
               ))}
             </div>
           )}
@@ -222,21 +159,7 @@ export default function AboutRoomPage({
                   transitionDuration={1000}
                 >
                   {services?.data.map((item: IServices) => (
-                    <Card key={item.id} className="!w-full p-4">
-                      <CardContent className="relative w-24 h-24 mx-auto mb-2">
-                        <CustomImage
-                          imgUrl={item.image}
-                          alt={item.name}
-                          fill
-                          className="object-contain"
-                        />
-                      </CardContent>
-                      <CardFooter className="flex justify-center !p-0">
-                        <span className="text-xl font-medium w-9/12 text-center">
-                          {item.name}
-                        </span>
-                      </CardFooter>
-                    </Card>
+                    <ServiceCard key={item.id} item={item} />
                   ))}
                 </Carousel>
               </>
@@ -245,140 +168,13 @@ export default function AboutRoomPage({
           {/* Cards */}
 
           <div className="flex flex-col-reverse gap-6 xl:gap-0 xl:flex-row mb-8">
-            <div className="w-full xl:w-2/3 pr-0 xl:pr-24 ">
-              <h3 className="font-semibold text-2xl mb-6">Comments</h3>
+            <Comments
+              roomId={params.roomId}
+              room={room}
+              refetchFunc={refetchFunc}
+            />
 
-              <div className="">
-                <div
-                  className="w-full !h-[300px] md:!h-[620px] overflow-y-scroll"
-                  id="comments"
-                >
-                  {room.comments.reverse().map((item: IComment, i: number) => (
-                    <div key={item.id}>
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <Avatar>
-                            <AvatarImage
-                              src={item.user.image}
-                              alt={item.user.username}
-                              className="cursor-pointer w-12 h-12 object-cover"
-                            />
-                            <AvatarFallback>
-                              {item.user.username.slice(0, 1)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className="font-medium tracking-wide">
-                            {item.user.username}
-                          </span>
-                          <BsDot />
-                          <span className="text-black/70">
-                            {item.created_at}
-                          </span>
-                        </div>
-                        <p className="w-full xl:w-4/5 text-black/70">
-                          {item.text}
-                        </p>
-                      </div>
-                      {i !== room.comments.length - 1 && (
-                        <Separator className="my-4 w-[95%]" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 flex gap-2">
-                  <Input
-                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                      setCommentData(e.target.value)
-                    }
-                    value={commentData}
-                    placeholder="Leave a comment"
-                    className="focus-visible:ring-offset-0 focus-visible:ring-current"
-                  />
-                  <Button
-                    disabled={isPending}
-                    onClick={sendComment}
-                    className="bg-current hover:bg-current/90 transition-colors"
-                  >
-                    Send
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            <div className=" w-full xl:w-1/3 mb-4 xl:mb-0" id="booking">
-              <h3 className="font-semibold text-2xl mb-6">
-                Order The Wedding Day
-              </h3>
-
-              <div className="bg-zinc-100 rounded-md !h-[620px] mb-4 p-2">
-                <DayPicker
-                  mode="single"
-                  selected={selected}
-                  onSelect={setSelected}
-                  disabled={disabledDays}
-                  defaultMonth={new Date(2024, 2, 28)}
-                />
-
-                <Separator className="my-8" />
-
-                <div className="px-3 pb-3 mb-4">
-                  <div className="flex justify-between items-end mb-6">
-                    <div className="flex flex-col">
-                      <span className="text-gray-600 text-sm">
-                        06:00 - 10:00
-                      </span>
-                      <span className="text-xl font-medium">Morning</span>
-                    </div>
-                    <label
-                      htmlFor="morning_check"
-                      className="flex items-center"
-                    >
-                      <span className="mr-3 text-green-600">Available</span>
-                      <input
-                        type="checkbox"
-                        id="morning_check"
-                        name="morning_check"
-                        className="!w-4 !h-4"
-                      />
-                    </label>
-                  </div>
-                  <div className="flex justify-between items-end mb-6">
-                    <div className="flex flex-col">
-                      <span className="text-gray-600 text-sm">
-                        12:00 - 16:00
-                      </span>
-                      <span className="text-xl font-medium">Afternoon</span>
-                    </div>
-                    <label
-                      htmlFor="afternoon_check"
-                      className="flex items-center"
-                    >
-                      <span className="mr-3 text-green-600">Available</span>
-                      <input
-                        type="checkbox"
-                        id="afternoon_check"
-                        name="afternoon_check"
-                        className="!w-4 !h-4"
-                      />
-                    </label>
-                  </div>
-                  <div className="flex justify-between items-end mb-6">
-                    <div className="flex flex-col">
-                      <span className="text-gray-600 text-sm">
-                        18:00 - 22:00
-                      </span>
-                      <span className="text-xl font-medium">Night</span>
-                    </div>
-                    <label htmlFor="check">
-                      <span className="mr-3 text-red-600">Not available</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <Button className="bg-current w-full hover:bg-current/90 transition-colors">
-                Send the Booking
-              </Button>
-            </div>
+            <DateComponent roomId={params.roomId} />
           </div>
         </>
       ) : (

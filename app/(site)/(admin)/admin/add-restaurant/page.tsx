@@ -1,7 +1,12 @@
 "use client";
 
-import { ChangeEvent, useEffect, useState } from "react";
-import { getDistricts, getRegions } from "@/actinos";
+import { ChangeEvent, useState } from "react";
+import {
+  getDistricts,
+  getNeighborhood,
+  getRegions,
+  getServices,
+} from "@/actinos";
 import { Input } from "@/components/ui/input";
 import { PhoneInput } from "@/components/ui/phone-input";
 import {
@@ -14,71 +19,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { IDistrict, IRegion } from "@/interface";
+import { IDistrict, INeighborhood, IRegion, IServices } from "@/interface";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Loader2, X } from "lucide-react";
-import { FaPeopleGroup, FaMapLocation } from "react-icons/fa6";
-import { MdRoomService, MdOutlineWifi } from "react-icons/md";
-import { FaParking } from "react-icons/fa";
-import { CiImageOn, CiMicrophoneOn } from "react-icons/ci";
-import { BsMusicNoteList } from "react-icons/bs";
-import { BiSolidCoffee } from "react-icons/bi";
+import { CiImageOn } from "react-icons/ci";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-
-interface IServicesItem {
-  name: string;
-  icon: JSX.Element;
-  active: boolean;
-}
-
-const servicesItems: IServicesItem[] = [
-  {
-    name: "Comfortable Location",
-    icon: <FaMapLocation className="text-xl" />,
-    active: false,
-  },
-  {
-    name: "Free Wifi",
-    icon: <MdOutlineWifi className="text-xl" />,
-    active: false,
-  },
-  {
-    name: "Room for coffee break",
-    icon: <BiSolidCoffee className="text-xl" />,
-    active: false,
-  },
-  {
-    name: "Free Paking zone",
-    icon: <FaParking className="text-xl" />,
-    active: false,
-  },
-  {
-    name: "Organizers",
-    icon: <FaPeopleGroup className="text-xl" />,
-    active: false,
-  },
-  {
-    name: "Singers",
-    icon: <CiMicrophoneOn className="text-xl" />,
-    active: false,
-  },
-  {
-    name: "Hight quatliy service",
-    icon: <MdRoomService className="text-xl" />,
-    active: false,
-  },
-  {
-    name: "Dancer",
-    icon: <BsMusicNoteList className="text-xl" />,
-    active: false,
-  },
-];
+import CustomImage from "@/app/(site)/_components/Image";
 
 export default function AddRestaurantPage() {
-  const [servicesAll, setAllServices] =
-    useState<IServicesItem[]>(servicesItems);
+  const [servicesIdList, setServicesIdList] = useState<number[]>([]);
   const [districts, setDistricts] = useState<IDistrict[]>([]);
-  const [neighborhood, setNeighborhood] = useState([]);
+  const [neighborhood, setNeighborhood] = useState<INeighborhood[]>([]);
+
   const [searchData, setSearchData] = useState<{
     region_id: string;
     district_id: string;
@@ -94,11 +46,26 @@ export default function AddRestaurantPage() {
     queryFn: getRegions,
   });
 
+  const { data: services } = useQuery({
+    queryKey: ["service"],
+    queryFn: getServices,
+  });
+
   const { mutate: selectRegionFunc } = useMutation({
     mutationKey: ["district"],
     mutationFn: (id: string) => getDistricts(+id),
     onSuccess({ data }) {
       setDistricts(data);
+    },
+    onError(error, variables) {
+      console.log(error, variables);
+    },
+  });
+  const { mutate: selectDistrict } = useMutation({
+    mutationKey: ["district"],
+    mutationFn: (id: string) => getNeighborhood(+id),
+    onSuccess({ data }) {
+      setNeighborhood(data);
     },
     onError(error, variables) {
       console.log(error, variables);
@@ -111,8 +78,11 @@ export default function AddRestaurantPage() {
   };
   const handelDestrict = (value: string) => {
     setSearchData((prev) => ({ ...prev, district_id: value }));
+    selectDistrict(value);
   };
-  const handelNeighborhood = (value: string) => {};
+  const handelNeighborhood = (value: string) => {
+    setSearchData((prev) => ({ ...prev, neighborhood: value }));
+  };
 
   const [images, setImages] = useState<File[]>([]);
   const setImagesFunc = (imgs: any) =>
@@ -199,17 +169,17 @@ export default function AddRestaurantPage() {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <Select>
+              <Select onValueChange={handelNeighborhood}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Neighborhood" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Select Neighborhood</SelectLabel>
-                    {districts.length ? (
-                      districts.map(({ id, name }: IDistrict) => (
-                        <SelectItem key={id} value={String(id)}>
-                          {name}
+                    {neighborhood.length ? (
+                      neighborhood.map((item: INeighborhood) => (
+                        <SelectItem key={item.id} value={String(item.id)}>
+                          {item.name}
                         </SelectItem>
                       ))
                     ) : (
@@ -297,9 +267,10 @@ export default function AddRestaurantPage() {
                 </Select>
               </label>
             </div>
-            <label>
-              <span className="text-xl">Choose Services</span>
-              <div className="flex flex-wrap gap-2">
+            {services?.data && (
+              <label>
+                <span className="text-xl">Choose Services</span>
+                {/* <div className="flex flex-wrap gap-2">
                 {servicesAll.map((item: IServicesItem, i: number) => (
                   <div
                     onClick={() => {
@@ -316,8 +287,42 @@ export default function AddRestaurantPage() {
                     <span className="font-medium">{item.name}</span>
                   </div>
                 ))}
-              </div>
-            </label>
+              </div> */}
+                <div className="flex flex-wrap gap-2">
+                  {services.data.map((item: IServices, i: number) => (
+                    <div
+                      onClick={() =>
+                        setServicesIdList((prev: number[]) => [
+                          ...prev,
+                          item.id,
+                        ])
+                      }
+                      onDoubleClick={() =>
+                        setServicesIdList(
+                          servicesIdList.filter((n: number) => n !== item.id)
+                        )
+                      }
+                      key={i}
+                      className={`border-[1px] cursor-pointer border-neutral-600 rounded-3xl inline-flex gap-1 py-1 px-4 select-none ${
+                        servicesIdList.includes(item.id) &&
+                        "bg-current text-white border-transparent"
+                      }`}
+                    >
+                      <div className="w-6 h-6 relative">
+                        <CustomImage
+                          imgUrl={item.image}
+                          alt={item.name}
+                          fill
+                          className="object-contain mix-blend-multiply brightness-1 invert-0"
+                        />
+                      </div>
+                      <span className="font-medium">{item.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </label>
+            )}
+
             <div className="flex flex-col gap-2 mt-4">
               <span className="text-xl">Product Gallery</span>
               <label
