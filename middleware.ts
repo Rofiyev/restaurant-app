@@ -10,32 +10,20 @@ const adminRoutes = [
   "/admin/edit-restaurant",
 ];
 const userRoutes = ["/user-profile", "/user-profile/booking"];
-const authAdminRoutes = ["/auth-admin/sign-in"];
 
 export async function middleware(request: NextRequest) {
   const currentUser = await request.cookies.get("currentUser")?.value;
   const role = await request.cookies.get("role")?.value;
 
-  if (
-    (authRoutes.includes(request.nextUrl.pathname) && currentUser) ||
-    (authAdminRoutes.includes(request.nextUrl.pathname) && currentUser)
-  ) {
+  if (authRoutes.includes(request.nextUrl.pathname) && currentUser) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (
-    adminRoutes.includes(request.nextUrl.pathname) &&
-    role !== "admin" &&
-    !currentUser
-  ) {
+  if (adminRoutes.includes(request.nextUrl.pathname) && role !== "admin") {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
-  if (
-    userRoutes.includes(request.nextUrl.pathname) &&
-    role === "admin" &&
-    !currentUser
-  ) {
+  if (userRoutes.includes(request.nextUrl.pathname) && role !== "user") {
     return NextResponse.redirect(new URL("/", request.url));
   }
 }

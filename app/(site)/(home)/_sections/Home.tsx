@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Search } from "lucide-react";
+import { Loader2, Search, X } from "lucide-react";
 import { useDrawer } from "@/hooks/use-drawer";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getDistricts, getRegions, getSearchData } from "@/actinos";
@@ -84,13 +84,6 @@ const HomeSection = () => {
   return (
     <section className="p-2 relative h-[70vh] xl:h-[90vh]">
       <div className="absolute inset-0 !h-full !w-full overflow-hidden rounded-xl bg-gray-500">
-        {/* <video
-          src="/video-fon.mp4"
-          muted
-          autoPlay
-          loop
-          className="object-cover !h-full !w-full aspect-auto xl:aspect-video"
-        ></video> */}
         <CustomImage
           imgUrl={bg.src}
           alt="Background"
@@ -142,14 +135,19 @@ const HomeSection = () => {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Button
-            disabled={isSearching}
-            onClick={searchFilter}
-            variant={"outline"}
-            className="!p-2 md:p-4"
-          >
-            <Search />
-          </Button>
+          <div className="flex gap-1">
+            <Button
+              disabled={isSearching}
+              onClick={searchFilter}
+              variant={"outline"}
+              className="!p-2 md:p-4"
+            >
+              <Search />
+            </Button>
+            {/* <Button variant={"outline"} className="!p-2 md:p-4">
+              <X />
+            </Button> */}
+          </div>
         </div>
       </div>
     </section>
