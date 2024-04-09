@@ -42,14 +42,12 @@ export const ResetFormEmail: FC<{
     mutationKey: ["confrim_email"],
     mutationFn: (email: string) => resetEmail(email),
     onSuccess: async (res) => {
-      console.log(res);
       toast.success(res.data.detail);
       changeEmail(email);
       resetNextForm();
     },
-    onError(error) {
-      console.log(error);
-      toast.error("Xatolik mavjud!");
+    onError() {
+      toast.error("There is an error!");
     },
   });
 

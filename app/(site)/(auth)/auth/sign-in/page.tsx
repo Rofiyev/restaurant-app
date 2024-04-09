@@ -29,7 +29,7 @@ import {
 import { twMerge } from "tailwind-merge";
 import { Loader2 } from "lucide-react";
 import { setToken } from "@/helpers/persistaneStorage";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 
 export default function SignIn() {
   const router = useRouter();
@@ -45,11 +45,11 @@ export default function SignIn() {
   const { mutate, isPending } = useMutation({
     mutationKey: ["login_user"],
     mutationFn: (data: ILoginForm) => setLogin(data),
-    onSuccess: async (res) => {
+    onSuccess: (res) => {
       if (res.data) {
         setToken(res?.data);
         toast.success("The information is confirmed!");
-        await router.push("/");
+        router.push("/");
       }
       form.reset();
     },

@@ -49,12 +49,11 @@ export default function Reset() {
     mutationFn: (data: IResetPassword) => confirmPassword(data),
     onSuccess: async (res) => {
       toast.success(res.data.detail);
-      await router.push("/auth/sign-in");
+      router.push("/auth/sign-in");
       form.reset();
     },
     onError(error) {
-      console.log(error);
-      toast.error("Xatolik mavjud!");
+      toast.error("There is an error!");
     },
   });
 

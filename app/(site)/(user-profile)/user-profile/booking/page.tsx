@@ -37,12 +37,10 @@ const caruselImages: string[] = [
 ];
 
 export default function BookingPage() {
-  const { data: res, isPending } = useQuery({
+  const { data: res } = useQuery({
     queryKey: ["my_bookings"],
     queryFn: getBooking,
   });
-
-  console.log(res?.data);
 
   return (
     <div className="w-full px-1 md:px-2 xl:px-8">

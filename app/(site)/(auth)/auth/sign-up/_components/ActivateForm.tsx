@@ -46,7 +46,7 @@ const ActivateForm: FC<{
   const { mutate, isPending } = useMutation({
     mutationKey: ["register_user", "activate_code"],
     mutationFn: (data: IActivateCode) => activateRegisterCode(data),
-    onSuccess: async ({ data }) => {
+    onSuccess: ({ data }) => {
       toast.success(data.message);
       const token = {
         access: data.access,
@@ -54,7 +54,7 @@ const ActivateForm: FC<{
       };
       setToken(token);
       handleCookieData();
-      await router.push("/");
+      router.push("/");
       toggleIsActive();
     },
     onError() {

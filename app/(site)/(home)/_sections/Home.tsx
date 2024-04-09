@@ -42,9 +42,6 @@ const HomeSection = () => {
     onSuccess({ data }) {
       setDistricts(data);
     },
-    onError(error, variables) {
-      console.log(error, variables);
-    },
   });
 
   const { mutate: filterDataFunc, isPending: isSearching } = useMutation({
@@ -56,9 +53,6 @@ const HomeSection = () => {
         : toast.error(
             "There is no information for the request you have requested!"
           );
-    },
-    onError(error, variables) {
-      console.log(error, variables);
     },
   });
 
@@ -80,9 +74,7 @@ const HomeSection = () => {
     setSearchData((prev) => ({ ...prev, district_id: value }));
   };
 
-  useLayoutEffect(() => {
-    onClose();
-  }, [onClose]);
+  useLayoutEffect(onClose, [onClose]);
 
   return (
     <section className="p-2 relative h-[70vh] xl:h-[90vh]">
