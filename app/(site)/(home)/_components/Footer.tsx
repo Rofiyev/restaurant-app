@@ -21,12 +21,12 @@ export default function Footer() {
           <h3 className="text-white text-4xl font-bold ">ADORE</h3>
         </div>
         <div className="flex flex-col md:flex-row justify-between items-end mt-6">
-          <p className="text-white w-full text-center md:text-left md:w-1/3 mb-6 md:mb-0">
+          <p className="text-white hidden md:block w-full text-center md:text-left md:w-1/3 mb-6 md:mb-0">
             Ullam exercitationem laboriosam pariatur voluptatum tenetur vero
             numquam quaerat.
           </p>
           <div className="flex flex-row-reverse md:flex-row w-full md:w-2/6 justify-between md:justify-end items-start md:items-end">
-            <div className="flex flex-col items-end">
+            <div className="hidden md:flex flex-col items-end">
               <p className="text-white text-md">Our call center</p>
               <p className="text-white">
                 <a href="tel:+998999999999" className="hover:underline">
@@ -39,15 +39,15 @@ export default function Footer() {
                 </a>
               </p>
             </div>
-            <div className="flex flex-col gap-1 md:hidden">
+            <div className="flex flex-row justify-center w-full gap-4 md:hidden">
               <Link href="/">
-                <FaFacebook className="text-white text-2xl" />
+                <FaFacebook className="text-white text-3xl" />
               </Link>
               <Link href="/">
-                <FaInstagram className="text-white text-2xl" />
+                <FaInstagram className="text-white text-3xl" />
               </Link>
               <Link href="/">
-                <FaTelegram className="text-white text-2xl" />
+                <FaTelegram className="text-white text-3xl" />
               </Link>
             </div>
           </div>

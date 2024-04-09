@@ -50,11 +50,14 @@ const HomeSection = () => {
     mutationKey: ["search_data"],
     mutationFn: (searchItem: ISearchParams) => getSearchData(searchItem),
     onSuccess({ data }) {
-      data.results.length
-        ? setRestaurants(data)
-        : toast.error(
-            "There is no information for the request you have requested!"
-          );
+      data.length
+        ? setRestaurants({
+            results: data,
+            count: data.length,
+            next: null,
+            previous: null,
+          })
+        : toast.error("No information was found for your request!");
     },
   });
 

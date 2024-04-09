@@ -74,17 +74,17 @@ const SuggestionsSection = () => {
             {restaurants.results.map((item: IRestaurant) => (
               <Card
                 key={item.id}
-                className="w-full overflow-hidden border-none shadow-none rounded-sm"
+                className="w-full overflow-hidden p-2 shadow-none rounded-md border-[1px] border-gray-100"
               >
                 <CardContent className="flex flex-col gap-3 !p-0">
-                  <div className="flex flex-col xl:flex-row gap-3">
-                    <div className="relative w-full h-[300px] xl:w-3/4">
+                  <div className="flex flex-col xl:flex-row gap-2">
+                    <div className="relative w-full h-[296px] xl:w-3/4">
                       {item.images.length ? (
                         <>
                           <CustomImage
                             imgUrl={item.images[0]?.image}
                             alt="Image"
-                            className="inset-0 object-cover"
+                            className="inset-0 object-cover rounded-sm"
                             fill={true}
                           />
                         </>
@@ -94,12 +94,12 @@ const SuggestionsSection = () => {
                             "https://c8.alamy.com/compfr/2rf6dgj/vecteur-d-icone-d-image-signe-et-symbole-de-galerie-de-photos-icone-image-2rf6dgj.jpg"
                           }
                           alt="Image"
-                          className="inset-0 object-cover border-[1px] border-gray-100"
+                          className="inset-0 object-cover border-[1px] border-gray-100 rounded-sm"
                           fill={true}
                         />
                       )}
                     </div>
-                    <div className="flex xl:flex-col gap-3 items-stretch">
+                    <div className="flex xl:flex-col gap-2 items-stretch">
                       <div className="w-2/4 xl:w-[200px] !overflow-hidden">
                         {item.images.length ? (
                           <Carousel
@@ -122,7 +122,7 @@ const SuggestionsSection = () => {
                                   imgUrl={imgUrl.image}
                                   alt={`Fon ${imgUrl.id}`}
                                   fill={true}
-                                  className={`inset-0 object-cover`}
+                                  className={`inset-0 object-cover rounded-sm`}
                                 />
                               </div>
                             ))}
@@ -163,7 +163,7 @@ const SuggestionsSection = () => {
                                 imgUrl={imgUrl.image}
                                 alt={`Fon ${imgUrl.id}`}
                                 fill={true}
-                                className={`inset-0 object-cover `}
+                                className={`inset-0 object-cover rounded-sm`}
                               />
                             </div>
                           ))}
@@ -172,7 +172,7 @@ const SuggestionsSection = () => {
                     </div>
                   </div>
                 </CardContent>
-                <CardFooter className="mt-4 px-1 flex flex-col">
+                <CardFooter className="mt-4 !pb-0 !px-0 flex flex-col">
                   <div className="flex items-center justify-between w-full">
                     <CardTitle className="text-current text-xl xl:text-2xl">
                       {item.name}
@@ -201,14 +201,14 @@ const SuggestionsSection = () => {
                     <CardDescription className="text-md text-neutral-700 !line-clamp-3 w-full xl:w-3/4">
                       {item.description}
                     </CardDescription>
-                    <Button
-                      onClick={() => openRoomIdFunc(`/room/${item.id}`)}
-                      className="w-full xl:w-28 bg-current hover:bg-current/80"
-                    >
-                      <MdOutlineBorderColor className="mr-2 h-4 w-4" />
-                      <span>Booking</span>
-                    </Button>
                   </div>
+                  <Button
+                    onClick={() => openRoomIdFunc(`/room/${item.id}`)}
+                    className="w-full mt-4 h-11 bg-current hover:bg-current/80"
+                  >
+                    <MdOutlineBorderColor className="mr-2 h-4 w-4" />
+                    <span>Booking</span>
+                  </Button>
                 </CardFooter>
               </Card>
             ))}

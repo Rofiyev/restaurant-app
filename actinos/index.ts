@@ -14,6 +14,7 @@ import {
   IRegion,
   IRegisterForm,
   IResetPassword,
+  IRestaurant,
   IRestaurantList,
   IRestaurantRequest,
   IRoomId,
@@ -75,9 +76,9 @@ export const getSearchData = ({
   district_id,
   region_id,
 }: ISearchParams): Promise<{
-  data: IRestaurantList;
+  data: IRestaurant[];
 }> => {
-  return customAxios.get("/restaurant/list", {
+  return customAxios.get("/search", {
     params: { district_id, region_id },
   });
 };
