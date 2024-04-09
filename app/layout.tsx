@@ -8,9 +8,9 @@ const fontSans = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Restaurant - APP",
-  description: "Restaurant Application",
-  icons: [{ url: "/logo.png", href: "/logo.png" }],
+  title: "ADORE - Restaurants",
+  description: "ADORE - Restaurant Application",
+  icons: [{ url: "/logo.ico", href: "/logo.ico" }],
 };
 
 export default function RootLayout({
