@@ -18,6 +18,8 @@ import { getDistricts, getRegions, getSearchData } from "@/actinos";
 import { IDistrict, IRegion, ISearchParams } from "@/interface";
 import { useRestaurant } from "@/hooks/use-restaurant";
 import toast from "react-hot-toast";
+import CustomImage from "../../_components/Image";
+import bg from "../../../../assets/background.jpeg";
 
 const HomeSection = () => {
   const [searchData, setSearchData] = useState<{
@@ -79,13 +81,19 @@ const HomeSection = () => {
   return (
     <section className="p-2 relative h-[70vh] xl:h-[90vh]">
       <div className="absolute inset-0 !h-full !w-full overflow-hidden rounded-xl bg-gray-500">
-        <video
+        {/* <video
           src="/video-fon.mp4"
           muted
           autoPlay
           loop
           className="object-cover !h-full !w-full aspect-auto xl:aspect-video"
-        ></video>
+        ></video> */}
+        <CustomImage
+          imgUrl={bg.src}
+          alt="Background"
+          fill
+          className="object-cover w-full h-full"
+        />
       </div>
       <div className="absolute -bottom-5 left-2/4 -translate-x-2/4 z-10">
         <div className="bg-white py-2 px-4 sm:py-6 sm:px-16 border-2 border-gray-200 rounded-xl flex flex-row gap-2 md:gap-6">

@@ -93,7 +93,8 @@ export const AddRestaurant = z.object({
   }),
   price: z
     .string({ invalid_type_error, required_error })
-    .min(2, { message: "Price must be at least 2 characters." }),
+    .min(2, { message: "Price must be at least 2 characters." })
+    .max(11),
   description: z.string({ invalid_type_error, required_error }).min(20, {
     message: "Description must be at least 20 characters.",
   }),
@@ -140,7 +141,7 @@ export const EditRestaurant = z.object({
   price: z
     .string({ invalid_type_error, required_error })
     .min(2, { message: "Price must be at least 2 characters." })
-    .max(10),
+    .max(11),
   description: z.string({ invalid_type_error, required_error }).min(20, {
     message: "Description must be at least 20 characters.",
   }),

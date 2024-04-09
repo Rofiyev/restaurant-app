@@ -28,6 +28,7 @@ const CustomImage: FC<Props> = ({ imgUrl, alt, fill, className }) => {
           }`,
           className
         )}
+        loading="lazy"
         onLoadingComplete={() => setIsLaoding(false)}
       />
     </>
