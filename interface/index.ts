@@ -132,7 +132,7 @@ export interface IMyBooking {
   id: number;
   name: string;
   price: number;
-  phone: string;
+  phone: string | number;
   size_people: number;
   address: {
     id: number;
@@ -216,4 +216,75 @@ export interface IOrderOneDayRequest {
   evening: boolean;
   restaurant: number;
   status?: string;
+}
+
+export interface IBookingAdmin {
+  id: number;
+  date: string;
+  morning: boolean;
+  afternoon: boolean;
+  evening: boolean;
+  user: IUserData;
+  restaurant: number;
+  status?: string;
+}
+
+export interface IAddress {
+  mahalla: number;
+  street: string;
+  house: string;
+  region?: string;
+}
+
+export interface IRestaurantRequest {
+  name: string;
+  price: string;
+  description: string;
+  phone: string;
+  size_people: number;
+  address: IAddress;
+  services: number[];
+  working_time: {
+    morning_time: string;
+    afternoon_time: string;
+    evening_time: string;
+  };
+}
+export interface IEditRestaurantRequest {
+  name: string;
+  price: string;
+  description: string;
+  phone: string;
+  size_people: number;
+  address: {
+    mahalla: number;
+    street: string;
+    house: string;
+  };
+  services: number[];
+  working_time: {
+    morning_time: string;
+    afternoon_time: string;
+    evening_time: string;
+  };
+}
+export interface IAdminMyBooking {
+  customer: {
+    full_name: string;
+    image: string;
+    phone: string;
+  };
+  date: string;
+  id: number;
+  restaurant_name: string;
+  status: string;
+  time: string[];
+}
+
+export interface IUserBooking {
+  date: string;
+  id: number;
+  restaurant: { id: number; name: string; images: string[]; phone: string };
+  status: string;
+  time: string[];
 }

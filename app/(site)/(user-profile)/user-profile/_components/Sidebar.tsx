@@ -6,13 +6,14 @@ import { useDrawer } from "@/hooks/use-drawer";
 import { useUser } from "@/hooks/use-user";
 import { ISidebarItem } from "@/interface";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { FaRegUser, FaListUl } from "react-icons/fa";
 import { IoExitOutline } from "react-icons/io5";
 import Cookies from "js-cookie";
 
 export default function Sidebar() {
-  const router = usePathname();
+  const pathname = usePathname();
+  const router = useRouter();
   const { onClose } = useDrawer();
   const { removeUser } = useUser();
 
@@ -20,6 +21,7 @@ export default function Sidebar() {
     removeUser();
     Cookies.remove("currentUser");
     Cookies.remove("role");
+    router.push("/");
   };
 
   const links: ISidebarItem[] = [
@@ -27,7 +29,7 @@ export default function Sidebar() {
       icon: (
         <FaRegUser
           className={`w-[22px] h-[22px] ${
-            router === "/user-profile" && "text-current"
+            pathname === "/user-profile" && "text-current"
           }`}
         />
       ),
@@ -38,7 +40,7 @@ export default function Sidebar() {
       icon: (
         <FaListUl
           className={`w-[22px] h-[22px] ${
-            router === "/user-profile/booking" && "text-current"
+            pathname === "/user-profile/booking" && "text-current"
           }`}
         />
       ),
@@ -59,13 +61,13 @@ export default function Sidebar() {
               onClick={onClose}
               href={item.route}
               className={`flex gap-3 w-full cursor-pointer border-[1px] border-transparent ${
-                router === item.route && "bg-current/10 !border-current/80 "
+                pathname === item.route && "bg-current/10 !border-current/80 "
               } rounded p-3`}
             >
               {item.icon}
               <span
                 className={`font-medium ${
-                  router === item.route && "text-current"
+                  pathname === item.route && "text-current"
                 }`}
               >
                 {item.label}

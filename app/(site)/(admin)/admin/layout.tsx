@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 const AdminLayout: FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <section className="flex">
+    <section className={`flex`}>
       <div className="hidden xl:flex">
         <Sidebar />
       </div>

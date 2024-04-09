@@ -53,33 +53,45 @@ export default function Comments({
               className="w-full !h-[300px] md:!h-[620px] overflow-y-scroll"
               id="comments"
             >
-              {room.comments.reverse().map((item: IComment, i: number) => (
-                <div key={item.id}>
-                  <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
-                      <Avatar>
-                        <AvatarImage
-                          src={item.user.image}
-                          alt={item.user.username}
-                          className="cursor-pointer w-12 h-12 object-cover"
-                        />
-                        <AvatarFallback>
-                          {item.user.username.slice(0, 1)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="font-medium tracking-wide">
-                        {item.user.username}
-                      </span>
-                      <BsDot />
-                      <span className="text-black/70">{item.created_at}</span>
+              {room.comments.length ? (
+                <>
+                  {room.comments.reverse().map((item: IComment, i: number) => (
+                    <div key={item.id}>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                          <Avatar>
+                            <AvatarImage
+                              src={item.user.image}
+                              alt={item.user.username}
+                              className="cursor-pointer w-12 h-12 object-cover"
+                            />
+                            <AvatarFallback>
+                              {item.user.username.slice(0, 1)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="font-medium tracking-wide">
+                            {item.user.username}
+                          </span>
+                          <BsDot />
+                          <span className="text-black/70">
+                            {item.created_at}
+                          </span>
+                        </div>
+                        <p className="w-full xl:w-4/5 text-black/70">
+                          {item.text}
+                        </p>
+                      </div>
+                      {i !== room.comments.length - 1 && (
+                        <Separator className="my-4 w-[95%]" />
+                      )}
                     </div>
-                    <p className="w-full xl:w-4/5 text-black/70">{item.text}</p>
-                  </div>
-                  {i !== room.comments.length - 1 && (
-                    <Separator className="my-4 w-[95%]" />
-                  )}
+                  ))}
+                </>
+              ) : (
+                <div className="flex justify-center items-center w-full h-full bg-gray-100">
+                  <p>There are no comments</p>
                 </div>
-              ))}
+              )}
             </div>
             <div className="mt-4 flex gap-2">
               <Input

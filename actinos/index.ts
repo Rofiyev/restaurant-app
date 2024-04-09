@@ -5,8 +5,9 @@ import {
   ICheckDay,
   ICheckDayRes,
   IDistrict,
+  IEditRestaurantRequest,
   ILoginForm,
-  IMyBooking,
+  IMyRestaurant,
   INeighborhood,
   IOrderOneDayRequest,
   IPostComment,
@@ -14,16 +15,14 @@ import {
   IRegisterForm,
   IResetPassword,
   IRestaurantList,
+  IRestaurantRequest,
   IRoomId,
   ISearchParams,
   IServices,
 } from "@/interface";
 
 export const setRegister = (data: IRegisterForm) => {
-  return customAxios.post("/user/register", {
-    ...data,
-    phone: "+998",
-  });
+  return customAxios.post("/user/register", data);
 };
 
 export const activateRegisterCode = (data: IActivateCode) => {
@@ -60,10 +59,6 @@ export const getNeighborhood = (
   district_id: number
 ): Promise<{ data: INeighborhood[] }> => {
   return customAxios.get("/mahalla", { params: { district_id } });
-};
-
-export const getMyBooking = (): Promise<{ data: IMyBooking[] }> => {
-  return customAxios.get("/restaurant/my");
 };
 
 export const getAllRestaurant = ({
@@ -124,4 +119,48 @@ export const orederOneDay = (
   data: IOrderOneDayRequest
 ): Promise<{ data: IOrderOneDayRequest }> => {
   return customAxios.post(`/booking`, data);
+};
+
+export const getBooking = () => {
+  return customAxios.get("/booking/my");
+};
+
+export const getMyRestaurants = (): Promise<{ data: IMyRestaurant[] }> => {
+  return customAxios.get("/restaurant/my");
+};
+
+export const restaurantCreate = (data: IRestaurantRequest) => {
+  return customAxios.post("/restaurant", data);
+};
+
+export const restaurantImage = (formData: any) => {
+  return customAxios.post("/restaurant/image", formData, {
+    headers: {
+      " Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const deleteRestaurantReq = (id: number) => {
+  return customAxios.delete(`/restaurant/${id}`);
+};
+
+export const getNeighborhoodEdit = (): Promise<{ data: INeighborhood[] }> => {
+  return customAxios.get("/mahalla");
+};
+
+export const putImage = (id: number, data: FormData) => {
+  return customAxios.put(`/restaurant/image/${id}`, data, {
+    headers: {
+      " Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const deleteRestaurantImage = (id: number) => {
+  return customAxios.delete(`/restaurant/image/${id}`);
+};
+
+export const putRestaurant = (id: number, data: IEditRestaurantRequest) => {
+  return customAxios.put(`/restaurant/${id}`, data);
 };

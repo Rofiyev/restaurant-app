@@ -47,28 +47,43 @@ export default function AboutRoomPage({
         <>
           <div className="flex flex-col xl:flex-row gap-8 py-4">
             <div className="w-full xl:w-4/6">
-              <Carousel
-                swipeable={false}
-                draggable={false}
-                responsive={responsive}
-                infinite
-                autoPlay
-                autoPlaySpeed={2000}
-                customTransition="all .5"
-                transitionDuration={500}
-                showDots
-              >
-                {room.images.map((img: { image: string; id: number }) => (
-                  <div key={img.id} className="w-full !h-[540px] relative">
-                    <CustomImage
-                      imgUrl={img.image}
-                      alt="Fon 1"
-                      fill
-                      className="!h-[540px] !w-full object-cover rounded-md"
-                    />
-                  </div>
-                ))}
-              </Carousel>
+              {room.images.length ? (
+                <>
+                  <Carousel
+                    swipeable={false}
+                    draggable={false}
+                    responsive={responsive}
+                    infinite
+                    autoPlay
+                    autoPlaySpeed={2000}
+                    customTransition="all .5"
+                    transitionDuration={500}
+                    showDots
+                  >
+                    {room.images.map((img: { image: string; id: number }) => (
+                      <div key={img.id} className="w-full !h-[540px] relative">
+                        <CustomImage
+                          imgUrl={img.image}
+                          alt="Fon 1"
+                          fill
+                          className="!h-[540px] !w-full object-cover rounded-md"
+                        />
+                      </div>
+                    ))}
+                  </Carousel>
+                </>
+              ) : (
+                <div className="w-full !h-[540px] relative border-[1px] border-gray-100">
+                  <CustomImage
+                    imgUrl={
+                      "https://c8.alamy.com/compfr/2rf6dgj/vecteur-d-icone-d-image-signe-et-symbole-de-galerie-de-photos-icone-image-2rf6dgj.jpg"
+                    }
+                    alt="Fon 1"
+                    fill
+                    className="!h-[540px] !w-full object-cover rounded-md"
+                  />
+                </div>
+              )}
             </div>
             <div className="w-full xl:w-4/12">
               <div className="flex justify-between items-start">

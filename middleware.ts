@@ -2,7 +2,13 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const authRoutes = ["/auth/sign-in", "/auth/sign-up"];
-const adminRoutes = ["/admin", "/admin/booking", "/admin/restaurant"];
+const adminRoutes = [
+  "/admin",
+  "/admin/booking",
+  "/admin/restaurant",
+  "/admin/add-restaurant",
+  "/admin/edit-restaurant",
+];
 const userRoutes = ["/user-profile", "/user-profile/booking"];
 const authAdminRoutes = ["/auth-admin/sign-in"];
 

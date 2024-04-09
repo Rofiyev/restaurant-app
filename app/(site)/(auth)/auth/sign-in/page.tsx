@@ -49,7 +49,7 @@ export default function SignIn() {
       if (res.data) {
         setToken(res?.data);
         toast.success("The information is confirmed!");
-        router.push("/");
+        await router.push("/");
       }
       form.reset();
     },

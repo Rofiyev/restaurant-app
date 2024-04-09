@@ -4,12 +4,7 @@ import { z } from "zod";
 const invalid_type_error: string = "Invalid type provided for this field";
 const required_error: string = "This field cannot be blank";
 
-export const FormRegisterSchema: z.ZodObject<{
-  full_name: z.ZodString;
-  email: z.ZodString;
-  username: z.ZodString;
-  password: z.ZodString;
-}> = z.object({
+export const FormRegisterSchema = z.object({
   full_name: z.string({ invalid_type_error, required_error }).min(5, {
     message: "Full Name must be at least 5 characters.",
   }),
@@ -19,6 +14,10 @@ export const FormRegisterSchema: z.ZodObject<{
     .min(5, {
       message: "Email must be at least 5 characters.",
     }),
+  phone: z
+    .string()
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" })
+    .or(z.literal("")),
   username: z.string({ invalid_type_error, required_error }).min(5, {
     message: "Full Name must be at least 5 characters.",
   }),
@@ -86,4 +85,97 @@ export const ProfileSchema = z.object({
     .string()
     .refine(isValidPhoneNumber, { message: "Invalid phone number" })
     .or(z.literal("")),
+});
+
+export const AddRestaurant = z.object({
+  name: z.string({ invalid_type_error, required_error }).min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  price: z
+    .string({ invalid_type_error, required_error })
+    .min(2, { message: "Price must be at least 2 characters." }),
+  description: z.string({ invalid_type_error, required_error }).min(20, {
+    message: "Description must be at least 20 characters.",
+  }),
+  phone: z
+    .string()
+    .min(1)
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" })
+    .or(z.literal("")),
+  select_region: z
+    .string({
+      required_error: "Please select an region to display.",
+    })
+    .min(1, { message: "Address must be entered!" }),
+  select_district: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "Address must be entered!" }),
+  select_neighbourhood: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "Address must be entered!" }),
+  street: z
+    .string({ invalid_type_error, required_error })
+    .min(2, { message: "Street must be at least 2 characters" }),
+  house_number: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "House number must be at least 1 characters" }),
+  people_size: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "The number of people must be specified!" }),
+  select_morning: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "Time must be set" }),
+  select_afternoon: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "Time must be set" }),
+  select_evening: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "Time must be set" }),
+});
+
+export const EditRestaurant = z.object({
+  name: z.string({ invalid_type_error, required_error }).min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  price: z
+    .string({ invalid_type_error, required_error })
+    .min(2, { message: "Price must be at least 2 characters." })
+    .max(10),
+  description: z.string({ invalid_type_error, required_error }).min(20, {
+    message: "Description must be at least 20 characters.",
+  }),
+  phone: z
+    .string()
+    .min(1)
+    .refine(isValidPhoneNumber, { message: "Invalid phone number" })
+    .or(z.literal("")),
+  select_region: z
+    .string({
+      required_error: "Please select an region to display.",
+    })
+    .min(1, { message: "Address must be entered!" }),
+  select_district: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "Address must be entered!" }),
+  select_neighbourhood: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "Address must be entered!" }),
+  street: z
+    .string({ invalid_type_error, required_error })
+    .min(2, { message: "Street must be at least 2 characters" }),
+  house_number: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "House number must be at least 1 characters" }),
+  people_size: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "The number of people must be specified!" }),
+  select_morning: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "Time must be set" }),
+  select_afternoon: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "Time must be set" }),
+  select_evening: z
+    .string({ invalid_type_error, required_error })
+    .min(1, { message: "Time must be set" }),
 });

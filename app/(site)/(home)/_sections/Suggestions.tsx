@@ -79,40 +79,68 @@ const SuggestionsSection = () => {
                 <CardContent className="flex flex-col gap-3 !p-0">
                   <div className="flex flex-col xl:flex-row gap-3">
                     <div className="relative w-full h-[300px] xl:w-3/4">
-                      <CustomImage
-                        imgUrl={item.images[0].image}
-                        alt="Image"
-                        className="inset-0 object-cover"
-                        fill={true}
-                      />
+                      {item.images.length ? (
+                        <>
+                          <CustomImage
+                            imgUrl={item.images[0]?.image}
+                            alt="Image"
+                            className="inset-0 object-cover"
+                            fill={true}
+                          />
+                        </>
+                      ) : (
+                        <CustomImage
+                          imgUrl={
+                            "https://c8.alamy.com/compfr/2rf6dgj/vecteur-d-icone-d-image-signe-et-symbole-de-galerie-de-photos-icone-image-2rf6dgj.jpg"
+                          }
+                          alt="Image"
+                          className="inset-0 object-cover border-[1px] border-gray-100"
+                          fill={true}
+                        />
+                      )}
                     </div>
                     <div className="flex xl:flex-col gap-3 items-stretch">
                       <div className="w-2/4 xl:w-[200px] !overflow-hidden">
-                        <Carousel
-                          swipeable={false}
-                          draggable={false}
-                          responsive={responsive}
-                          ssr={true}
-                          infinite={true}
-                          autoPlay={true}
-                          autoPlaySpeed={2000}
-                          customTransition="all .5"
-                          transitionDuration={500}
-                        >
-                          {item.images.map((imgUrl) => (
-                            <div
-                              key={imgUrl.id}
-                              className="h-40 xl:h-36 !w-full relative"
-                            >
-                              <CustomImage
-                                imgUrl={imgUrl.image}
-                                alt={`Fon ${imgUrl.id}`}
-                                fill={true}
-                                className={`inset-0 object-cover `}
-                              />
-                            </div>
-                          ))}
-                        </Carousel>
+                        {item.images.length ? (
+                          <Carousel
+                            swipeable={false}
+                            draggable={false}
+                            responsive={responsive}
+                            ssr={true}
+                            infinite={true}
+                            autoPlay={true}
+                            autoPlaySpeed={2000}
+                            customTransition="all .5"
+                            transitionDuration={500}
+                          >
+                            {item.images.map((imgUrl) => (
+                              <div
+                                key={imgUrl.id}
+                                className="h-40 xl:h-36 !w-full relative"
+                              >
+                                <CustomImage
+                                  imgUrl={imgUrl.image}
+                                  alt={`Fon ${imgUrl.id}`}
+                                  fill={true}
+                                  className={`inset-0 object-cover`}
+                                />
+                              </div>
+                            ))}
+                          </Carousel>
+                        ) : (
+                          <div className="grid grid-cols-6 md:grid-cols-12 gap-3">
+                            {[...Array(2)].map((_, i: number) => (
+                              <div
+                                key={i}
+                                className="h-40 xl:h-36 !w-full relative"
+                              >
+                                <div className="!w-full h-full border-[1px] border-gray-100 justify-center items-center flex">
+                                  {i + 1}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <div className="w-2/4 xl:w-[200px] !overflow-hidden">
                         <Carousel
@@ -178,7 +206,7 @@ const SuggestionsSection = () => {
                       className="w-full xl:w-28 bg-current hover:bg-current/80"
                     >
                       <MdOutlineBorderColor className="mr-2 h-4 w-4" />
-                      Booking
+                      <span>Booking</span>
                     </Button>
                   </div>
                 </CardFooter>

@@ -63,16 +63,6 @@ export default function AdminPage() {
     mutate(formData);
   };
 
-  const unSaveNewData = () => {
-    if (user) {
-      form.setValue("full_name", user?.full_name);
-      form.setValue("username", user?.username);
-      form.setValue("email", user?.email);
-      form.setValue("phone", user?.phone || "");
-      setPhoneNumber(user.phone ? user.phone : "");
-    }
-  };
-
   return (
     <>
       {user && (

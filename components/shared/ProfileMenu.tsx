@@ -14,6 +14,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useUser } from "@/hooks/use-user";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const menuItems = [
   {
@@ -30,11 +31,13 @@ const menuItems = [
 
 export default function ProfileMenu() {
   const { user, removeUser } = useUser();
+  const router = useRouter();
 
   const logoutProfile = () => {
     removeUser();
     Cookies.remove("currentUser");
     Cookies.remove("role");
+    router.push("/");
   };
 
   return (

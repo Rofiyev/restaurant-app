@@ -31,6 +31,7 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import ActivateForm from "./_components/ActivateForm";
 import Cookies from "js-cookie";
+import { PhoneInput } from "@/components/ui/phone-input";
 
 export default function SignUp() {
   const [cookieData, setCookieData] = useState<boolean>(false);
@@ -46,6 +47,7 @@ export default function SignUp() {
       email: "",
       username: "",
       password: "",
+      phone: "",
     },
   });
 
@@ -146,6 +148,24 @@ export default function SignUp() {
                 />
                 <FormField
                   control={form.control}
+                  name="phone"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col items-start">
+                      <FormControl className="w-full">
+                        <PhoneInput
+                          placeholder="Enter a phone number"
+                          {...field}
+                          value={field.value}
+                          onChange={field.onChange}
+                          disabled={false}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="username"
                   render={({ field, fieldState }) => (
                     <FormItem>
@@ -171,6 +191,7 @@ export default function SignUp() {
                     <FormItem>
                       <FormControl>
                         <Input
+                          type="password"
                           placeholder="Password"
                           className={twMerge(
                             "focus-visible:ring-offset-0 focus-visible:ring-current",

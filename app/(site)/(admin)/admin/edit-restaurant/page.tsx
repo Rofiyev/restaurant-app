@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
   Form,
@@ -10,16 +10,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { AddRestaurant } from "@/schema/validation";
+import { EditRestaurant } from "@/schema/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
+  deleteRestaurantImage,
   getDistricts,
   getNeighborhood,
   getRegions,
+  getRoomId,
   getServices,
-  restaurantCreate,
+  putImage,
+  putRestaurant,
   restaurantImage,
 } from "@/actinos";
 import { Input } from "@/components/ui/input";
@@ -35,46 +38,27 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  IAddress,
   IDistrict,
+  IEditRestaurantRequest,
   INeighborhood,
   IRegion,
-  IRestaurantRequest,
   IServices,
 } from "@/interface";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Loader2, X } from "lucide-react";
+import { Check, Loader2, X } from "lucide-react";
 import { CiImageOn } from "react-icons/ci";
 import CustomImage from "@/app/(site)/_components/Image";
 import { Button } from "@/components/ui/button";
 import { twMerge } from "tailwind-merge";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
+import { MdChangeCircle } from "react-icons/md";
 import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
 
 export default function AddRestaurantPage() {
   const router = useRouter();
-  const [servicesIdList, setServicesIdList] = useState<number[]>([]);
-  const [districts, setDistricts] = useState<IDistrict[]>([]);
-  const [neighborhood, setNeighborhood] = useState<INeighborhood[]>([]);
-
-  const form = useForm<z.infer<typeof AddRestaurant>>({
-    resolver: zodResolver(AddRestaurant),
-    defaultValues: {
-      name: "",
-      price: "",
-      description: "",
-      phone: "",
-      select_region: "",
-      select_district: "",
-      select_neighbourhood: "",
-      street: "",
-      house_number: "",
-      people_size: "",
-      select_afternoon: "",
-      select_evening: "",
-      select_morning: "",
-    },
-  });
+  const { get } = useSearchParams();
+  const query_params = get("restaurant_id");
 
   const [searchData, setSearchData] = useState<{
     region_id: string;
@@ -85,14 +69,12 @@ export default function AddRestaurantPage() {
     district_id: "",
     neighborhood: "",
   });
+  const [districts, setDistricts] = useState<IDistrict[]>([]);
+  const [neighborhood, setNeighborhood] = useState<INeighborhood[]>([]);
 
   const { data: reg } = useQuery({
     queryKey: ["region"],
     queryFn: getRegions,
-  });
-  const { data: services } = useQuery({
-    queryKey: ["service"],
-    queryFn: getServices,
   });
 
   const { mutate: selectRegionFunc } = useMutation({
@@ -128,37 +110,74 @@ export default function AddRestaurantPage() {
     setSearchData((prev) => ({ ...prev, neighborhood: value }));
   };
 
-  const [imageError, setImageError] = useState<boolean>(false);
-  const [images, setImages] = useState<File[]>([]);
-  const setImagesFunc = (imgs: any) =>
-    imgs && setImages((prev) => [...prev, ...imgs]);
-
-  const { mutate: postImageMutate } = useMutation({
-    mutationKey: ["create_image_restaurant"],
-    mutationFn: (data: FormData) => restaurantImage(data),
-    async onSuccess({ data }) {
-      if (data) {
-        form.reset();
-        setImages([]);
-        setSearchData({ region_id: "", district_id: "", neighborhood: "" });
-        setServicesIdList([]);
-        await toast.success("Create restaurant successfully!");
-        router.push("/admin/restaurant");
+  const { data: res, refetch } = useQuery({
+    queryKey: ["editRoom"],
+    queryFn: () => {
+      if (query_params) {
+        return getRoomId(query_params);
       }
     },
   });
 
-  const { mutate: createRestaurantMutate } = useMutation({
-    mutationFn: (data: IRestaurantRequest) => restaurantCreate(data),
-    mutationKey: ["restaurant_post"],
-    onSuccess({ data }) {
-      const formData = new FormData();
-      for (let x = 0; x < images.length; x++) {
-        formData.append("images", images[x]);
-      }
-      formData.append("restaurant", data.id);
+  const [imageError, setImageError] = useState<boolean>(false);
+  const [images, setImages] = useState<File[]>([]);
+  const [imagesRes, setImagesRes] = useState<{ id: number; image: string }[]>(
+    []
+  );
 
-      postImageMutate(formData);
+  const setImagesFunc = (imgs: any) =>
+    imgs && setImages((prev) => [...prev, ...imgs]);
+  const [servicesIdList, setServicesIdList] = useState<number[]>([]);
+
+  const form = useForm<z.infer<typeof EditRestaurant>>({
+    resolver: zodResolver(EditRestaurant),
+    defaultValues: {
+      name: "",
+      price: "",
+      description: "",
+      phone: "",
+      select_district: "",
+      select_neighbourhood: "",
+      street: "",
+      house_number: "",
+      people_size: "",
+      select_afternoon: "",
+      select_evening: "",
+      select_morning: "",
+    },
+  });
+
+  useEffect(() => {
+    if (res?.data) {
+      form.setValue("name", res.data.name);
+      form.setValue("price", res.data.price.toString());
+      form.setValue("description", res.data.description);
+      form.setValue("phone", res.data.phone);
+      form.setValue("people_size", res.data.size_people.toString());
+      setServicesIdList(res.data.services);
+      form.setValue("street", res.data.address.street);
+      form.setValue("house_number", res.data.address.house);
+      setImagesRes(res.data.images);
+    }
+  }, [res, form]);
+
+  const { data: services } = useQuery({
+    queryKey: ["service"],
+    queryFn: getServices,
+  });
+
+  const { mutate: editRestaurantMutate, isPending: editLoading } = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: IEditRestaurantRequest }) =>
+      putRestaurant(id, data),
+    mutationKey: ["edit_restaurant"],
+    onSuccess({ data }) {
+      if (data) {
+        toast.success("Restaurant information has been changed!");
+        router.push("/admin/restaurant");
+      }
+    },
+    onError() {
+      toast.error("There is an error!");
     },
   });
 
@@ -172,52 +191,104 @@ export default function AddRestaurantPage() {
     select_afternoon,
     select_evening,
     select_morning,
-    select_neighbourhood,
-  }: z.infer<typeof AddRestaurant>) => {
-    const [district] = districts.filter(
-      (c: IDistrict) => c.id === +searchData.district_id
-    );
-    const [mahalla] = neighborhood.filter(
-      (item: INeighborhood) => item.id === +searchData.neighborhood
-    );
-    if (reg) {
-      const [region] = reg.data.filter(
-        (item: IRegion) => item.id === +searchData.region_id
-      );
+    street,
+  }: z.infer<typeof EditRestaurant>) => {
+    if (!images) {
+      setImageError(true);
+      return;
+    }
 
-      if (mahalla && district) {
-        if (images.length) {
-          const data: IRestaurantRequest = {
-            name,
-            price,
-            description,
-            phone,
-            size_people: +people_size,
-            address: {
-              mahalla: mahalla.id,
-              street: district.name,
-              house: house_number,
-              region: region.name,
-            },
-            services: servicesIdList,
-            working_time: {
-              morning_time: select_morning,
-              afternoon_time: select_afternoon,
-              evening_time: select_evening,
-            },
-          };
+    const data: IEditRestaurantRequest = {
+      name,
+      price,
+      description,
+      phone,
+      size_people: +people_size,
+      address: {
+        mahalla: +searchData.neighborhood,
+        street: street,
+        house: house_number,
+      },
+      services: servicesIdList,
+      working_time: {
+        morning_time: select_morning,
+        afternoon_time: select_afternoon,
+        evening_time: select_evening,
+      },
+    };
+    if (query_params) {
+      editRestaurantMutate({ id: +query_params, data });
+    }
+  };
 
-          createRestaurantMutate(data);
-          setImageError(false);
-        } else setImageError(true);
+  const [changeItemId, setChangeItemId] = useState<number | null>(null);
+
+  const { mutate, isPending: replaceImageLoading } = useMutation({
+    mutationKey: ["put_image"],
+    mutationFn: ({ id, data }: { id: number; data: FormData }) =>
+      putImage(id, data),
+    onSuccess() {
+      toast.success("Image replace successfully!");
+      refetch();
+      setChangeItemId(null);
+      setImages([]);
+    },
+  });
+
+  const { mutate: saveImageMutate, isPending: saveImageLoading } = useMutation({
+    mutationKey: ["post-image"],
+    mutationFn: (data: FormData) => restaurantImage(data),
+    onSuccess({ data }) {
+      if (data) {
+        toast.success("Created new image successfully");
+        refetch();
+        setImages([]);
+      }
+    },
+  });
+
+  const handleChangeImage = (imgId: number) => setChangeItemId(imgId);
+
+  const putImageRes = () => {
+    if (changeItemId) {
+      if (query_params && changeItemId) {
+        const fd = new FormData();
+        console.log(images[0]);
+
+        fd.append("restaurant", query_params.toString());
+        for (let x = 0; x < images.length; x++) {
+          fd.append("images", images[x]);
+        }
+
+        mutate({ id: changeItemId, data: fd });
+      }
+    } else {
+      if (query_params) {
+        const fd = new FormData();
+        for (let x = 0; x < images.length; x++) {
+          fd.append("images", images[x]);
+        }
+        fd.append("restaurant", query_params);
+
+        saveImageMutate(fd);
       }
     }
   };
 
+  const { mutate: deleteMutate, isPending: deletedImageLoading } = useMutation({
+    mutationKey: ["delete_img"],
+    mutationFn: (id: number) => deleteRestaurantImage(id),
+    onSuccess() {
+      toast.success("Delete image successfully");
+      refetch();
+    },
+  });
+  const deleteImage = (id: number) => deleteMutate(id);
+
   return (
     <div className="w-full px-1 md:px-2 xl:px-8">
       <h3 className="text-[42px] font-semibold mt-0 md:mt-4 xl:mt-0">
-        Add restaurant
+        Edit restaurant
       </h3>
       <Form {...form}>
         <form className="mt-4 mb-8" onSubmit={form.handleSubmit(onSubmit)}>
@@ -408,7 +479,7 @@ export default function AddRestaurantPage() {
                   )}
                 />
 
-                {/* <FormField
+                <FormField
                   control={form.control}
                   name="select_neighbourhood"
                   render={({ field }) => (
@@ -495,63 +566,63 @@ export default function AddRestaurantPage() {
                       <FormMessage />
                     </FormItem>
                   )}
-                /> */}
+                />
               </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="grid grid-cols-2 gap-2">
-                <FormField
-                  control={form.control}
-                  name="people_size"
-                  render={({ field, fieldState }) => (
-                    <FormItem className="flex flex-col items-start my-2">
-                      <FormLabel className="text-left">People size</FormLabel>
-                      <FormControl className="w-full">
-                        <Input
-                          type="number"
-                          id="people_size"
-                          placeholder="People size"
-                          className={twMerge(
-                            `focus-visible:ring-offset-0 focus-visible:ring-current`,
-                            fieldState.error &&
-                              "focus-visible:ring-red-600 focus-visible:border-none border-red-600"
-                          )}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="select_morning"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Morning</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Mording time" />
-                          </SelectTrigger>
+              <div className="flex flex-col gap-1">
+                <div className="grid grid-cols-2 gap-2">
+                  <FormField
+                    control={form.control}
+                    name="people_size"
+                    render={({ field, fieldState }) => (
+                      <FormItem className="flex flex-col items-start my-2">
+                        <FormLabel className="text-left">People size</FormLabel>
+                        <FormControl className="w-full">
+                          <Input
+                            type="number"
+                            id="people_size"
+                            placeholder="People size"
+                            className={twMerge(
+                              `focus-visible:ring-offset-0 focus-visible:ring-current`,
+                              fieldState.error &&
+                                "focus-visible:ring-red-600 focus-visible:border-none border-red-600"
+                            )}
+                            {...field}
+                          />
                         </FormControl>
-                        <SelectContent className="focus-visible:ring-offset-0 focus-visible:ring-current">
-                          <SelectGroup>
-                            <SelectLabel>Select Time</SelectLabel>
-                            <SelectItem value={"06:00-10:10"}>
-                              06:00 - 10:00
-                            </SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="select_morning"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Morning</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Mording time" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="focus-visible:ring-offset-0 focus-visible:ring-current">
+                            <SelectGroup>
+                              <SelectLabel>Select Time</SelectLabel>
+                              <SelectItem value={"06:00-10:10"}>
+                                06:00 - 10:00
+                              </SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <FormField
@@ -612,6 +683,8 @@ export default function AddRestaurantPage() {
                   )}
                 />
               </div>
+            </div>
+            <div className="flex flex-col gap-2">
               {services?.data && (
                 <label>
                   <span className="text-xl">Choose Services</span>
@@ -654,7 +727,7 @@ export default function AddRestaurantPage() {
                 <span className="text-xl">Product Gallery</span>
                 <label
                   htmlFor="images"
-                  className={`w-full h-40 border border-dashed flex justify-center items-center flex-col gap-2 ${
+                  className={`w-full h-36 border border-dashed flex justify-center items-center flex-col gap-2 ${
                     imageError && "border-red-600"
                   }`}
                 >
@@ -665,7 +738,6 @@ export default function AddRestaurantPage() {
                     type="file"
                     id="images"
                     className="invisible"
-                    multiple
                     accept="image/*"
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       setImagesFunc(e.target.files)
@@ -674,11 +746,46 @@ export default function AddRestaurantPage() {
                 </label>
 
                 <div className="flex flex-col gap-2">
+                  <Separator className="my-2" />
+                  <div
+                    className={`grid grid-cols-2 md:grid-cols-3 gap-2 w-full ${
+                      deletedImageLoading && "opacity-40 cursor-not-allowed"
+                    }`}
+                  >
+                    {imagesRes.length
+                      ? imagesRes.map((item: { id: number; image: string }) => (
+                          <div key={item.id} className="relative w-full h-32">
+                            <CustomImage
+                              alt={item.image}
+                              imgUrl={item.image}
+                              fill
+                              className="object-cover"
+                            />
+                            <div className="absolute right-0 flex gap-[0.5px]">
+                              <X
+                                className=" text-red-600 cursor-pointer  bg-white/80"
+                                onClick={() => deleteImage(item.id)}
+                              />
+                              <label
+                                htmlFor="images"
+                                className="cursor-pointer bg-white/80 flex justify-center items-center"
+                                onClick={() => handleChangeImage(item.id)}
+                              >
+                                <MdChangeCircle className="text-blue-600 text-xl" />
+                              </label>
+                            </div>
+                          </div>
+                        ))
+                      : null}
+                  </div>
                   {images.length
                     ? images.map((imgFile, i: number) => (
                         <div
                           key={i}
-                          className="bg-gray-200 flex gap-2 rounded-md p-1 justify-between items-center"
+                          className={`bg-gray-200 flex gap-2 rounded-md p-1 justify-between items-center ${
+                            (replaceImageLoading || saveImageLoading) &&
+                            "opacity-40 cursor-not-allowed"
+                          }`}
                         >
                           <div className="flex gap-2 items-center">
                             <Avatar className="rounded-md">
@@ -690,16 +797,22 @@ export default function AddRestaurantPage() {
                             </Avatar>
                             <span>{imgFile.name}</span>
                           </div>
-                          <X
-                            className="!text-red-600 cursor-pointer mr-2"
-                            onClick={() =>
-                              setImages(
-                                images.filter(
-                                  (item) => item.name !== imgFile.name
+                          <div className="flex">
+                            <X
+                              className="!text-red-600 cursor-pointer mr-2"
+                              onClick={() =>
+                                setImages(
+                                  images.filter(
+                                    (item) => item.name !== imgFile.name
+                                  )
                                 )
-                              )
-                            }
-                          />
+                              }
+                            />
+                            <Check
+                              className="!text-green-600 cursor-pointer mr-2"
+                              onClick={putImageRes}
+                            />
+                          </div>
                         </div>
                       ))
                     : null}
@@ -707,9 +820,13 @@ export default function AddRestaurantPage() {
               </div>
             </div>
           </div>
-          <div className="mt-3">
-            <Button className="bg-current hover:bg-current/80 transition w-full md:w-min mt-2">
-              Create Restaurant
+          <div className="mt-3 flex justify-end">
+            <Button
+              disabled={editLoading}
+              type="submit"
+              className="bg-current hover:bg-current/80 transition w-full md:w-min mt-2"
+            >
+              Changed save
             </Button>
           </div>
         </form>
