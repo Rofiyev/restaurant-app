@@ -23,6 +23,7 @@ export default function AboutRoomPage({
   params: { roomId: string };
 }) {
   const [room, setRoom] = useState<IRoomId | null>(null);
+
   const { data: res, refetch } = useQuery({
     queryKey: ["get_room_id"],
     queryFn: () => getRoomId(params.roomId),
@@ -61,12 +62,15 @@ export default function AboutRoomPage({
                     showDots
                   >
                     {room.images.map((img: { image: string; id: number }) => (
-                      <div key={img.id} className="w-full !h-[540px] relative">
+                      <div
+                        key={img.id}
+                        className="w-full !h-[300px] md:!h-[540px] relative"
+                      >
                         <CustomImage
                           imgUrl={img.image}
                           alt="Fon 1"
                           fill
-                          className="!h-[540px] !w-full object-cover rounded-md"
+                          className="!h-[300px] md:!h-[540px] !w-full object-cover rounded-md"
                         />
                       </div>
                     ))}
@@ -151,14 +155,14 @@ export default function AboutRoomPage({
 
           {/* Cards */}
           {services?.data && (
-            <div className="hidden md:grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 mb-8">
+            <div className="hidden sm:grid grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-8 mb-8">
               {services.data.map((item: IServices) => (
                 <ServiceCard key={item.id} item={item} />
               ))}
             </div>
           )}
 
-          <div className="w-full block md:hidden mb-8 px-16 sm:px-0">
+          <div className="w-full block sm:hidden mb-8 px-8 sm:px-0">
             {services?.data && (
               <>
                 <h3 className="font-semibold text-2xl mb-6">All Services</h3>

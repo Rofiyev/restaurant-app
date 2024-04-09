@@ -25,7 +25,17 @@ export default function Comments({
     mutationKey: ["comment_post"],
     mutationFn: (data: IPostComment) => postComment(data),
     onSuccess(res) {
-      if (res.data) refetchFunc();
+      if (res.data) {
+        refetchFunc();
+        setTimeout(() => {
+          const elm = document.querySelector("#comments");
+          elm?.scrollTo({
+            left: 0,
+            behavior: "smooth",
+            top: elm.scrollHeight,
+          });
+        }, 1000);
+      }
     },
   });
 
@@ -40,7 +50,10 @@ export default function Comments({
         <h3 className="font-semibold text-2xl mb-6">Comments</h3>
         {room && (
           <div className="">
-            <div className="w-full !h-[300px] md:!h-[620px] overflow-y-scroll">
+            <div
+              className="w-full !h-[300px] md:!h-[620px] overflow-y-scroll"
+              id="comments"
+            >
               {room.comments.length ? (
                 <>
                   {room.comments.reverse().map((item: IComment, i: number) => (
