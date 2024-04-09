@@ -257,7 +257,7 @@ export default function AddRestaurantPage() {
 
         fd.append("restaurant", query_params.toString());
         for (let x = 0; x < images.length; x++) {
-          fd.append("images", images[x]);
+          fd.append("image", images[x]);
         }
 
         mutate({ id: changeItemId, data: fd });
