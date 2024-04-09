@@ -71,147 +71,156 @@ const SuggestionsSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {restaurants ? (
           <>
-            {restaurants.results.map((item: IRestaurant) => (
-              <Card
-                key={item.id}
-                className="w-full overflow-hidden p-2 shadow-none rounded-md border-[1px] border-gray-100"
-              >
-                <CardContent className="flex flex-col gap-3 !p-0">
-                  <div className="flex flex-col xl:flex-row gap-2">
-                    <div className="relative w-full h-[296px] xl:w-3/4">
-                      {item.images.length ? (
-                        <>
-                          <CustomImage
-                            imgUrl={item.images[0]?.image}
-                            alt="Image"
-                            className="inset-0 object-cover rounded-sm"
-                            fill={true}
-                          />
-                        </>
-                      ) : (
-                        <CustomImage
-                          imgUrl={
-                            "https://c8.alamy.com/compfr/2rf6dgj/vecteur-d-icone-d-image-signe-et-symbole-de-galerie-de-photos-icone-image-2rf6dgj.jpg"
-                          }
-                          alt="Image"
-                          className="inset-0 object-cover border-[1px] border-gray-100 rounded-sm"
-                          fill={true}
-                        />
-                      )}
-                    </div>
-                    <div className="flex xl:flex-col gap-2 items-stretch">
-                      <div className="w-2/4 xl:w-[200px] !overflow-hidden">
-                        {item.images.length ? (
-                          <Carousel
-                            swipeable={false}
-                            draggable={false}
-                            responsive={responsive}
-                            ssr={true}
-                            infinite={true}
-                            autoPlay={true}
-                            autoPlaySpeed={2000}
-                            customTransition="all .5"
-                            transitionDuration={500}
-                          >
-                            {item.images.map((imgUrl) => (
-                              <div
-                                key={imgUrl.id}
-                                className="h-40 xl:h-36 !w-full relative"
-                              >
-                                <CustomImage
-                                  imgUrl={imgUrl.image}
-                                  alt={`Fon ${imgUrl.id}`}
-                                  fill={true}
-                                  className={`inset-0 object-cover rounded-sm`}
-                                />
-                              </div>
-                            ))}
-                          </Carousel>
-                        ) : (
-                          <div className="grid grid-cols-6 md:grid-cols-12 gap-3">
-                            {[...Array(2)].map((_, i: number) => (
-                              <div
-                                key={i}
-                                className="h-40 xl:h-36 !w-full relative"
-                              >
-                                <div className="!w-full h-full border-[1px] border-gray-100 justify-center items-center flex">
-                                  {i + 1}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      <div className="w-2/4 xl:w-[200px] !overflow-hidden">
-                        <Carousel
-                          swipeable={false}
-                          draggable={false}
-                          responsive={responsive}
-                          ssr={true}
-                          infinite={true}
-                          autoPlay={true}
-                          autoPlaySpeed={2000}
-                          customTransition="all .5"
-                          transitionDuration={500}
-                        >
-                          {item.images.reverse().map((imgUrl) => (
-                            <div
-                              key={imgUrl.id}
-                              className="h-40 xl:h-36 !w-full relative"
-                            >
-                              <CustomImage
-                                imgUrl={imgUrl.image}
-                                alt={`Fon ${imgUrl.id}`}
-                                fill={true}
-                                className={`inset-0 object-cover rounded-sm`}
-                              />
-                            </div>
-                          ))}
-                        </Carousel>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter className="mt-4 !pb-0 !px-0 flex flex-col">
-                  <div className="flex items-center justify-between w-full">
-                    <CardTitle className="text-current text-xl xl:text-2xl">
-                      {item.name}
-                    </CardTitle>
-                    <div className="flex items-center gap-1">
-                      <span className="text-current text-xl xl:text-2xl font-semibold">
-                        {Number(item.price) / 1_000_000} mln
-                      </span>
-                      <FaRegMoneyBill1 className="text-current text-xl xl:text-2xl font-semibold -mt-1 w-8 h-8" />
-                    </div>
-                  </div>
-                  <div className="flex items-center justify-between w-full">
-                    <CardTitle className="text-gray-900 text-base xl:text-xl font-medium">
-                      {item.address.street} {item.address.mahalla}
-                      {", "}
-                      {item.address.house}
-                    </CardTitle>
-                    <div className="flex items-center gap-1">
-                      <span className="text-current text-xl xl:text-2xl font-semibold">
-                        {item.size_people}
-                      </span>
-                      <FaPeopleGroup className="text-current text-xl xl:text-2xl font-semibold -mt-1 w-8 h-8" />
-                    </div>
-                  </div>
-                  <div className="w-full flex flex-col xl:flex-row justify-between items-end gap-4 mt-2">
-                    <CardDescription className="text-md text-neutral-700 !line-clamp-3 w-full xl:w-3/4">
-                      {item.description}
-                    </CardDescription>
-                  </div>
-                  <Button
-                    onClick={() => openRoomIdFunc(`/room/${item.id}`)}
-                    className="w-full mt-4 h-11 bg-current hover:bg-current/80"
+            {restaurants.results.length ? (
+              <>
+                {" "}
+                {restaurants.results.map((item: IRestaurant) => (
+                  <Card
+                    key={item.id}
+                    className="w-full overflow-hidden p-3 shadow-none rounded-2xl border-[1px] border-gray-100"
                   >
-                    <MdOutlineBorderColor className="mr-2 h-4 w-4" />
-                    <span>Booking</span>
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+                    <CardContent className="flex flex-col gap-3 !p-0">
+                      <div className="flex flex-col xl:flex-row gap-2">
+                        <div className="relative w-full h-[296px] xl:w-3/4">
+                          {item.images.length ? (
+                            <>
+                              <CustomImage
+                                imgUrl={item.images[0]?.image}
+                                alt="Image"
+                                className="inset-0 object-cover rounded-md"
+                                fill={true}
+                              />
+                            </>
+                          ) : (
+                            <CustomImage
+                              imgUrl={
+                                "https://c8.alamy.com/compfr/2rf6dgj/vecteur-d-icone-d-image-signe-et-symbole-de-galerie-de-photos-icone-image-2rf6dgj.jpg"
+                              }
+                              alt="Image"
+                              className="inset-0 object-cover border-[1px] border-gray-100 rounded-md"
+                              fill={true}
+                            />
+                          )}
+                        </div>
+                        <div className="flex xl:flex-col gap-2 items-stretch">
+                          <div className="w-2/4 xl:w-[200px] !overflow-hidden">
+                            {item.images.length ? (
+                              <Carousel
+                                swipeable={false}
+                                draggable={false}
+                                responsive={responsive}
+                                ssr={true}
+                                infinite={true}
+                                autoPlay={true}
+                                autoPlaySpeed={2000}
+                                customTransition="all .5"
+                                transitionDuration={500}
+                              >
+                                {item.images.map((imgUrl) => (
+                                  <div
+                                    key={imgUrl.id}
+                                    className="h-40 xl:h-36 !w-full relative"
+                                  >
+                                    <CustomImage
+                                      imgUrl={imgUrl.image}
+                                      alt={`Fon ${imgUrl.id}`}
+                                      fill={true}
+                                      className={`inset-0 object-cover rounded-md`}
+                                    />
+                                  </div>
+                                ))}
+                              </Carousel>
+                            ) : (
+                              <div className="grid grid-cols-6 md:grid-cols-12 gap-3">
+                                {[...Array(2)].map((_, i: number) => (
+                                  <div
+                                    key={i}
+                                    className="h-40 xl:h-36 !w-full relative"
+                                  >
+                                    <div className="!w-full h-full border-[1px] border-gray-100 justify-center items-center flex">
+                                      {i + 1}
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                          <div className="w-2/4 xl:w-[200px] !overflow-hidden">
+                            <Carousel
+                              swipeable={false}
+                              draggable={false}
+                              responsive={responsive}
+                              ssr={true}
+                              infinite={true}
+                              autoPlay={true}
+                              autoPlaySpeed={2000}
+                              customTransition="all .5"
+                              transitionDuration={500}
+                            >
+                              {item.images.reverse().map((imgUrl) => (
+                                <div
+                                  key={imgUrl.id}
+                                  className="h-40 xl:h-36 !w-full relative"
+                                >
+                                  <CustomImage
+                                    imgUrl={imgUrl.image}
+                                    alt={`Fon ${imgUrl.id}`}
+                                    fill={true}
+                                    className={`inset-0 object-cover rounded-md`}
+                                  />
+                                </div>
+                              ))}
+                            </Carousel>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="mt-4 !pb-0 !px-0 flex flex-col">
+                      <div className="flex items-center justify-between w-full">
+                        <CardTitle className="text-current text-xl xl:text-2xl">
+                          {item.name}
+                        </CardTitle>
+                        <div className="flex items-center gap-1">
+                          <span className="text-current text-xl xl:text-2xl font-semibold">
+                            {Number(item.price) / 1_000_000} mln
+                          </span>
+                          <FaRegMoneyBill1 className="text-current text-xl xl:text-2xl font-semibold -mt-1 w-8 h-8" />
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between w-full">
+                        <CardTitle className="text-gray-900 text-base xl:text-xl font-medium">
+                          {item.address.street} {item.address.mahalla}
+                          {", "}
+                          {item.address.house}
+                        </CardTitle>
+                        <div className="flex items-center gap-1">
+                          <span className="text-current text-xl xl:text-2xl font-semibold">
+                            {item.size_people}
+                          </span>
+                          <FaPeopleGroup className="text-current text-xl xl:text-2xl font-semibold -mt-1 w-8 h-8" />
+                        </div>
+                      </div>
+                      <div className="w-full flex flex-col xl:flex-row justify-between items-end gap-4 mt-2">
+                        <CardDescription className="text-md text-neutral-700 !line-clamp-3 w-full xl:w-3/4">
+                          {item.description}
+                        </CardDescription>
+                      </div>
+                      <Button
+                        onClick={() => openRoomIdFunc(`/room/${item.id}`)}
+                        className="w-full mt-4 h-11 bg-current hover:bg-current/80 !rounded-md"
+                      >
+                        <MdOutlineBorderColor className="mr-2 h-4 w-4" />
+                        <span>Booking</span>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </>
+            ) : (
+              <h3 className="text-xl md:text-3xl font-semibold mt-4">
+                Not Found!
+              </h3>
+            )}
           </>
         ) : (
           <>
