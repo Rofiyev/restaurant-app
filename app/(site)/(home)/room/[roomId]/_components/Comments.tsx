@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { IComment, IPostComment, IRoomId } from "@/interface";
 import { useMutation } from "@tanstack/react-query";
 import { postComment } from "@/actinos";
+import { IoIosSend } from "react-icons/io";
 
 export default function Comments({
   roomId,
@@ -94,7 +95,7 @@ export default function Comments({
                 </div>
               )}
             </div>
-            <div className="mt-4 flex gap-2">
+            <div className="flex mt-4 gap-2">
               <Input
                 onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   setCommentData(e.target.value)
@@ -108,7 +109,7 @@ export default function Comments({
                 onClick={sendComment}
                 className="bg-current hover:bg-current/90 transition-colors"
               >
-                Send
+                Send <IoIosSend className="text-white ml-2 text-[18px]" />
               </Button>
             </div>
           </div>

@@ -16,6 +16,7 @@ import PageSkeleton from "./_components/PageSkeleton";
 import DateComponent from "./_components/DateComponent";
 import Comments from "./_components/Comments";
 import ServiceCard from "./_components/ServiceCard";
+import toast from "react-hot-toast";
 
 export default function AboutRoomPage({
   params,
@@ -42,6 +43,13 @@ export default function AboutRoomPage({
     document.querySelector("#booking")?.scrollIntoView({ behavior: "smooth" });
 
   const refetchFunc = () => refetch();
+
+  const copyNumber = () => {
+    res?.data &&
+      navigator.clipboard
+        .writeText(res?.data.phone.toString())
+        .then(() => toast.success("Copy number successfully!"));
+  };
   return (
     <>
       {room ? (
@@ -135,12 +143,19 @@ export default function AboutRoomPage({
               <div className="flex xl:w-full xl:flex-col mt-8 gap-2">
                 <a
                   href={`tel:${room.phone}`}
-                  className="w-full md:w-60 xl:w-full"
+                  className="w-full md:w-60 xl:w-full block md:hidden"
                 >
                   <Button className="bg-current hover:bg-current/90 transition-colors w-full md:w-60 xl:w-full">
                     Call Now
                   </Button>
                 </a>
+
+                <Button
+                  onClick={copyNumber}
+                  className="bg-current hover:bg-current/90 transition-colors w-full md:w-60 xl:w-full hidden md:block"
+                >
+                  Call Now
+                </Button>
                 <Button
                   onClick={bookingFunc}
                   className="bg-current hover:bg-current/90 transition-colors w-full md:w-60 xl:w-full"
