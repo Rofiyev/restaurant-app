@@ -37,7 +37,7 @@ export default function AdminBooking() {
       </h3>
       {res?.data.length ? (
         <>
-          <div className="w-full bg-current_bg_color p-4 rounded-xl">
+          <div className="w-full bg-current_bg_color p-4 mt-4 rounded-xl">
             <h3 className="text-xl font-semibold mb-4">Recent Purchases</h3>
             <Table className="overflow-hidden">
               <TableHeader>
@@ -110,7 +110,7 @@ export default function AdminBooking() {
         <div className="flex mt-6">
           <div className="flex items-center">
             <HiOutlineEmojiSad className="text-3xl" />
-            <span className="text-2xl ">Booking Yo`q</span>
+            <span className="text-2xl ">Booking not found!</span>
           </div>
         </div>
       )}

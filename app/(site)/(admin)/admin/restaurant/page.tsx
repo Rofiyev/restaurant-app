@@ -27,8 +27,6 @@ export default function AdminRestaurant() {
     queryFn: getMyRestaurants,
   });
 
-  console.log(res?.data);
-
   const { mutate, isPending } = useMutation({
     mutationKey: ["delete_retaurant"],
     mutationFn: (id: number) => deleteRestaurantReq(id),
@@ -49,7 +47,7 @@ export default function AdminRestaurant() {
     <div className="w-full px-1 md:px-2 xl:px-8">
       <div className="flex justify-between items-center mb-4 mt-0 md:mt-4 ">
         <h3 className="text-3xl sm:text-[42px] font-semibold xl:mt-0">
-          Restaurant List
+          Restaurants List
         </h3>
         <Button variant={"outline"}>
           <Link href={"/admin/add-restaurant"} className="flex">
@@ -95,8 +93,7 @@ export default function AdminRestaurant() {
                     {item.size_people}
                   </TableCell>
                   <TableCell className="text-nowrap">
-                    {item.address.mahalla} {item.address.street}{" "}
-                    {item.address.house}
+                    {item.address.region} {item.address.district}
                   </TableCell>
                   <TableCell className="text-nowrap">{item.phone}</TableCell>
                   <TableCell>
@@ -120,7 +117,7 @@ export default function AdminRestaurant() {
         <div className="flex mt-6">
           <div className="flex items-center">
             <HiOutlineEmojiSad className="text-3xl" />
-            <span className="text-2xl ">Restaurantlar Yo`q</span>
+            <span className="text-2xl ">Restaurants not found</span>
           </div>
         </div>
       )}

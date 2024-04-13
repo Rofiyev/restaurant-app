@@ -32,11 +32,13 @@ import { useState } from "react";
 import ActivateForm from "./_components/ActivateForm";
 import Cookies from "js-cookie";
 import { PhoneInput } from "@/components/ui/phone-input";
+import { BiShow, BiHide } from "react-icons/bi";
 
 export default function SignUp() {
   const [cookieData, setCookieData] = useState<boolean>(false);
   const [isActivate, setIsActivate] = useState<boolean>(false);
   const [userEmail, setUserEmail] = useState<string>("");
+  const [showEye, setShowEye] = useState<boolean>(false);
 
   const toggleIsActive = () => setIsActivate((prev: boolean) => !prev);
 
@@ -47,7 +49,7 @@ export default function SignUp() {
       email: "",
       username: "",
       password: "",
-      phone: "",
+      phone: "+998",
     },
   });
 
@@ -153,11 +155,12 @@ export default function SignUp() {
                     <FormItem className="flex flex-col items-start">
                       <FormControl className="w-full">
                         <PhoneInput
-                          placeholder="Enter a phone number"
                           {...field}
                           value={field.value}
                           onChange={field.onChange}
-                          disabled={false}
+                          international={false}
+                          defaultCountry="UZ"
+                          placeholder="Enter a phone number"
                         />
                       </FormControl>
                       <FormMessage />
@@ -184,27 +187,40 @@ export default function SignUp() {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field, fieldState }) => (
-                    <FormItem>
-                      <FormControl>
-                        <Input
-                          type="password"
-                          placeholder="Password"
-                          className={twMerge(
-                            "focus-visible:ring-offset-0 focus-visible:ring-current",
-                            fieldState.error &&
-                              "focus-visible:ring-red-600 focus-visible:border-none border-red-600"
-                          )}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="relative w-full">
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field, fieldState }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Input
+                            type={!showEye ? "password" : "text"}
+                            placeholder="Password"
+                            className={twMerge(
+                              "focus-visible:ring-offset-0 focus-visible:ring-current",
+                              fieldState.error &&
+                                "focus-visible:ring-red-600 focus-visible:border-none border-red-600"
+                            )}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button
+                    type="button"
+                    className="absolute right-0 top-0 bg-transparent text-black hover:bg-transparent"
+                    onClick={() => setShowEye((prev: boolean) => !prev)}
+                  >
+                    {showEye ? (
+                      <BiShow className="text-xl text-neutral-600" />
+                    ) : (
+                      <BiHide className="text-xl text-neutral-600" />
+                    )}
+                  </Button>
+                </div>
               </CardContent>
               <CardFooter>
                 <Button

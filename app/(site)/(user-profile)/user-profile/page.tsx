@@ -37,7 +37,7 @@ export default function UserProfilePage() {
       full_name: user?.full_name,
       username: user?.username,
       email: user?.email,
-      phone: phone_number || "",
+      phone: phone_number || "+998",
     },
   });
 
@@ -192,9 +192,9 @@ export default function UserProfilePage() {
                         <PhoneInput
                           placeholder="Enter a phone number"
                           {...field}
-                          value={user.phone ? user.phone : ""}
+                          value={user.phone ? user.phone : "+998"}
                           onChange={(e) => setPhoneNumber(e)}
-                          disabled={false}
+                          defaultCountry="UZ"
                         />
                       </FormControl>
                       <FormMessage />

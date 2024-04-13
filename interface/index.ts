@@ -91,6 +91,8 @@ export interface IMyRestaurant {
   address: {
     id: number;
     mahalla: number;
+    region: string;
+    district: string;
     street: string;
     house: string;
   };
@@ -110,6 +112,8 @@ export type IRestaurant = {
   ];
   address: {
     id: number;
+    region: string;
+    district: string;
     mahalla: number;
     street: string;
     house: string;
@@ -288,4 +292,3 @@ export interface IUserBooking {
   status: string;
   time: string[];
 }
-

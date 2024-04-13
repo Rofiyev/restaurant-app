@@ -8,7 +8,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         <Logo />
         <main>{children}</main>
         <footer>
-          <p>2023. All rights reserved</p>
+          <p>{new Date().getFullYear()}. All rights reserved</p>
         </footer>
       </section>
     </>

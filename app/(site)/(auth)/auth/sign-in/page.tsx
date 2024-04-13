@@ -30,9 +30,12 @@ import { twMerge } from "tailwind-merge";
 import { Loader2 } from "lucide-react";
 import { setToken } from "@/helpers/persistaneStorage";
 import { redirect, useRouter } from "next/navigation";
+import { useState } from "react";
+import { BiShow, BiHide } from "react-icons/bi";
 
 export default function SignIn() {
   const router = useRouter();
+  const [showEye, setShowEye] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof FormLoginSchema>>({
     resolver: zodResolver(FormLoginSchema),
@@ -99,27 +102,40 @@ export default function SignIn() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field, fieldState }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Password"
-                        className={twMerge(
-                          "focus-visible:ring-offset-0 focus-visible:ring-current",
-                          fieldState.error &&
-                            "focus-visible:ring-red-600 focus-visible:border-none border-red-600"
-                        )}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="relative w-full">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field, fieldState }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          type={!showEye ? "password" : "text"}
+                          placeholder="Password"
+                          className={twMerge(
+                            "focus-visible:ring-offset-0 focus-visible:ring-current",
+                            fieldState.error &&
+                              "focus-visible:ring-red-600 focus-visible:border-none border-red-600"
+                          )}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  className="absolute right-0 top-0 bg-transparent text-black hover:bg-transparent"
+                  onClick={() => setShowEye((prev: boolean) => !prev)}
+                >
+                  {showEye ? (
+                    <BiShow className="text-xl text-neutral-600" />
+                  ) : (
+                    <BiHide className="text-xl text-neutral-600" />
+                  )}
+                </Button>
+              </div>
               <CardDescription className="flex justify-end">
                 <Link
                   href={"/auth/reset-password"}

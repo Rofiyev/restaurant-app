@@ -95,10 +95,14 @@ export default function DateComponent({ roomId }: { roomId: string }) {
 
       if (selectDay === nowDay && selectMonth === nowMonth) {
         const nowHour = new Date().getHours();
-        console.log(nowHour, "Hello");
+
         if (nowHour > 6) setMorningDisNow(true);
         if (nowHour > 10) setAfternoonDisNow(true);
         if (nowHour > 17) setEveningDisNow(true);
+      } else {
+        setMorningDisNow(false);
+        setAfternoonDisNow(false);
+        setEveningDisNow(false);
       }
     }
   }, [selectedDay]);

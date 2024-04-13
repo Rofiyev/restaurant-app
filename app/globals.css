@@ -131,4 +131,7 @@
   border-radius: 50% !important;
   color: #000 !important;
 }
+.rdp-button {
+  margin-inline: auto !important;
+}
 /* DatePicker Styles End */

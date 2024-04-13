@@ -94,7 +94,7 @@ export default function BookingPage() {
           <div className="flex mt-2">
             <div className="flex items-center">
               <HiOutlineEmojiSad className="text-3xl" />
-              <span className="text-2xl ">Booking Yo`q</span>
+              <span className="text-2xl ">Booking not found!</span>
             </div>
           </div>
         )}

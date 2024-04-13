@@ -18,8 +18,8 @@ export const FormRegisterSchema = z.object({
     .string()
     .refine(isValidPhoneNumber, { message: "Invalid phone number" })
     .or(z.literal("")),
-  username: z.string({ invalid_type_error, required_error }).min(5, {
-    message: "Full Name must be at least 5 characters.",
+  username: z.string({ invalid_type_error, required_error }).min(2, {
+    message: "Full Name must be at least 2 characters.",
   }),
   password: z
     .string({ invalid_type_error, required_error })
@@ -38,8 +38,8 @@ export const ActivateRegisterSchema = z.object({
 });
 
 export const FormLoginSchema = z.object({
-  username: z.string({ invalid_type_error, required_error }).min(5, {
-    message: "Full Name must be at least 5 characters.",
+  username: z.string({ invalid_type_error, required_error }).min(2, {
+    message: "Full Name must be at least 2 characters.",
   }),
   password: z
     .string({ invalid_type_error, required_error })
@@ -72,7 +72,7 @@ export const ProfileSchema = z.object({
   full_name: z.string({ invalid_type_error, required_error }).min(5, {
     message: "Full Name must be at least 5 characters.",
   }),
-  username: z.string({ invalid_type_error, required_error }).min(5, {
+  username: z.string({ invalid_type_error, required_error }).min(2, {
     message: "Full Name must be at least 5 characters.",
   }),
   email: z
