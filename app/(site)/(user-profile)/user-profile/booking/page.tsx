@@ -1,16 +1,6 @@
 "use client";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { responsive } from "@/constants";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { CiCalendarDate, CiClock2 } from "react-icons/ci";
 import { GoDotFill } from "react-icons/go";
@@ -18,26 +8,11 @@ import Carousel from "react-multi-carousel";
 import { MdOutlineLocalPhone } from "react-icons/md";
 import { useQuery } from "@tanstack/react-query";
 import { getBooking } from "@/actinos";
-import { IMyBooking, IUserBooking } from "@/interface";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { AiOutlineFieldNumber } from "react-icons/ai";
+import { IUserBooking } from "@/interface";
 import { HiOutlineEmojiSad } from "react-icons/hi";
 
-const caruselImages: string[] = [
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmX0SscSWtU83bJbqpbkFjoSGSw6ivbDO67uzs9xR3fEGXE4z_RTGNi56GSHMjY95MeIE&usqp=CAU",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbAA5VpQErBxHVr6CdCNGO4ZdKpO4pxrY_4yvOHjCTPMsbEOYTWxgMwwUn_Df2W-MvzNk&usqp=CAU",
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRLD340bw4kxklVJamlK62VZZ1pSTyblBntM2o6701fA&s",
-];
-
 export default function BookingPage() {
-  const { data: res } = useQuery({
+  const { data: res } = useQuery<{ data: IUserBooking[] }>({
     queryKey: ["my_bookings"],
     queryFn: getBooking,
   });
@@ -49,7 +24,7 @@ export default function BookingPage() {
       </h3>
 
       <div className="w-full mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {res?.data ? (
+        {res?.data.length ? (
           res?.data.map((item: IUserBooking) => (
             <div
               key={item.id}

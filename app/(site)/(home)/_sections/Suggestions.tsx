@@ -73,7 +73,6 @@ const SuggestionsSection = () => {
           <>
             {restaurants.results.length ? (
               <>
-                {" "}
                 {restaurants.results.map((item: IRestaurant) => (
                   <Card
                     key={item.id}

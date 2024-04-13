@@ -44,9 +44,9 @@ export default function UserProfilePage() {
   const { mutate, isPending } = useMutation({
     mutationKey: ["change_user_data"],
     mutationFn: (data: FormData) => changeUserData(data),
-    onSuccess(res) {
+    onSuccess({ data }) {
       toast.success("All changes have been successfully saved!");
-      setUser(res.data);
+      setUser(data);
     },
     onError(e) {
       toast.success("Data not saved!");

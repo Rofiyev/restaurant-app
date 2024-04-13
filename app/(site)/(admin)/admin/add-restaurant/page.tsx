@@ -408,7 +408,7 @@ export default function AddRestaurantPage() {
                   )}
                 />
 
-                {/* <FormField
+                <FormField
                   control={form.control}
                   name="select_neighbourhood"
                   render={({ field }) => (
@@ -495,7 +495,7 @@ export default function AddRestaurantPage() {
                       <FormMessage />
                     </FormItem>
                   )}
-                /> */}
+                />
               </div>
             </div>
             <div className="flex flex-col gap-2">

@@ -288,3 +288,4 @@ export interface IUserBooking {
   status: string;
   time: string[];
 }
+
