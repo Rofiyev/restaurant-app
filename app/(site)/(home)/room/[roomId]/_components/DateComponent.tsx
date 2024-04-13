@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { Button } from "@/components/ui/button";
@@ -25,6 +25,9 @@ export default function DateComponent({ roomId }: { roomId: string }) {
   const [selectedDay, setSelectedDay] = useState<Date>();
   const [checkDayRes, setCheckRes] = useState<ICheckDayRes | null>(null);
   const [userSelect, setUserSelect] = useState<ITime>();
+  const [morningDisNow, setMorningDisNow] = useState<boolean>(false);
+  const [afternooDisNow, setAfternoonDisNow] = useState<boolean>(false);
+  const [eveningDisNow, setEveningDisNow] = useState<boolean>(false);
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["dayCheckingMutation"],
@@ -83,6 +86,23 @@ export default function DateComponent({ roomId }: { roomId: string }) {
     }
   };
 
+  useEffect(() => {
+    if (selectedDay) {
+      const selectDay = selectedDay.getDate();
+      const selectMonth = selectedDay.getMonth();
+      const nowDay = new Date().getDate();
+      const nowMonth = new Date().getMonth();
+
+      if (selectDay === nowDay && selectMonth === nowMonth) {
+        const nowHour = new Date().getHours();
+        console.log(nowHour, "Hello");
+        if (nowHour > 6) setMorningDisNow(true);
+        if (nowHour > 10) setAfternoonDisNow(true);
+        if (nowHour > 17) setEveningDisNow(true);
+      }
+    }
+  }, [selectedDay]);
+
   return (
     <div className=" w-full xl:w-1/3 mb-4 xl:mb-0" id="booking">
       <h3 className="font-semibold text-2xl mb-6">Order The Wedding Day</h3>
@@ -113,7 +133,7 @@ export default function DateComponent({ roomId }: { roomId: string }) {
                     <span className="text-gray-600 text-sm">06:00 - 10:00</span>
                     <span className="text-xl font-medium">Morning</span>
                   </div>
-                  {checkDayRes.morning_time ? (
+                  {checkDayRes.morning_time && !morningDisNow ? (
                     <label
                       htmlFor="morning_check"
                       className="flex cursor-pointer items-center"
@@ -138,7 +158,7 @@ export default function DateComponent({ roomId }: { roomId: string }) {
                     <span className="text-gray-600 text-sm">12:00 - 16:00</span>
                     <span className="text-xl font-medium">Afternoon</span>
                   </div>
-                  {checkDayRes.afternoon_time ? (
+                  {checkDayRes.afternoon_time && !afternooDisNow ? (
                     <label
                       htmlFor="afternoon_check"
                       className="flex cursor-pointer items-center"
@@ -166,7 +186,7 @@ export default function DateComponent({ roomId }: { roomId: string }) {
                     <span className="text-gray-600 text-sm">18:00 - 22:00</span>
                     <span className="text-xl font-medium">Night</span>
                   </div>
-                  {checkDayRes.evening_time ? (
+                  {checkDayRes.evening_time && !eveningDisNow ? (
                     <label
                       htmlFor="evening_check"
                       className="flex cursor-pointer items-center"

@@ -27,6 +27,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
+    "dayjs": "^1.11.10",
     "immer": "^10.0.4",
     "input-otp": "^1.2.3",
     "javascript-time-ago": "^2.5.9",
